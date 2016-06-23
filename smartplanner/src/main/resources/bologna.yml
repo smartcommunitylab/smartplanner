@@ -1,0 +1,14 @@
+otpEndpoint: http://127.0.0.1:7575/otp/routers/
+
+router: bologna
+
+googleAPINearBySearch: https://maps.googleapis.com/maps/api/place/nearbysearch/json
+
+googleAPIKey: AIzaSyCjKW72WoqcaeUiTwRzknUHu2uzz27KDAA
+
+publicTransport:
+  bolognaUrban:
+     agencyId: TPERBO
+     type: bus
+     tripTxt: trips_bl.txt
+     stopTxt: stops_bl.txt

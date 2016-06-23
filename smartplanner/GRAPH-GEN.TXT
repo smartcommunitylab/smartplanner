@@ -1,0 +1,6 @@
+1. Copy otp distribution to local file system.
+2. Copy gtfs in 'trentino' folder. The 'trentino' folder contains dataset(osm,gtfs,ned etc) required to build graph.
+3. Run from distribution root
+	java -Xmx4G -jar otp-0.15.0.jar --basePath . --build trentino
+	
+(Note 'trentino' is the name of graph router and is used as index in data APIs) 		

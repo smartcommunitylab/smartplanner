@@ -1,0 +1,130 @@
+otpEndpoint: http://127.0.0.1:7575/otp/routers/
+
+router: trentino
+
+googleAPINearBySearch: https://maps.googleapis.com/maps/api/place/nearbysearch/json
+
+googleAPIKey: AIzaSyCjKW72WoqcaeUiTwRzknUHu2uzz27KDAA
+
+publicTransport:
+  trentoUrban:
+     agencyId: 12
+     type: bus
+     tripTxt: trips_tt.txt
+     stopTxt: stops_tt.txt
+     specificProperties:
+       dateFrom: 02/02/15
+       dateTo: 09/06/15
+  roveretoUrban:
+    agencyId: 16
+    type: bus
+    tripTxt: trips_rv.txt
+    stopTxt: stops_rv.txt
+    specificProperties:
+      dateFrom: 02/02/15
+      dateTo: 09/06/15
+  extraUrban:
+    agencyId: 17
+    type: bus
+    tripTxt: trips_ext.txt
+    stopTxt: stops_ext.txt
+    specificProperties:
+      dateFrom: 02/02/15
+      dateTo: 09/06/15
+  bolzanoVerona:
+    agencyId: 5
+    type: train
+    tripTxt: trips_bv.txt
+    stopTxt: stops_bv.txt
+    specificProperties:
+      routeIds: BV_R1_R,BV_R1_G
+  trentoMale:
+    agencyId: 10
+    type: train
+    tripTxt: trips_tm.txt
+    stopTxt: stops_tm.txt
+    specificProperties:
+      routeIds: 555,556
+  trentoBassano:
+    agencyId: 6
+    type: train
+    tripTxt: trips_tb.txt
+    stopTxt: stops_tb.txt
+    specificProperties:
+      routeIds: TB_R2_R,TB_R2_G 
+    
+carParking:
+  COMUNE_DI_TRENTO:
+    agencyId: comune
+    specificProperties:
+      validity: 3
+      notification-threshold: 5
+    filePath: /cache/car/cp-comune_di_trento.json
+  COMUNE_DI_ROVERETO:
+    agencyId: comune
+    specificProperties:
+      validity: 3
+      notification-threshold: 5
+    filePath: /cache/car/cp-comune_di_rovereto.json
+
+carSharing:
+  CAR_SHARING_TRENTO:
+    agencyId: carsharingtn
+    region: trento
+    specificProperties:
+      validity: 1
+      notification-threshold: 5
+    filePath: /cache/car/cs-car_sharing_trento.json
+  CAR_SHARING_ROVERETO:
+    agencyId: carsharingtn
+    region: trento
+    specificProperties:
+      validity: 1
+      notification-threshold: 5
+    filePath: /cache/car/cs-car_sharing_rovereto.json
+
+bikeSharing:
+  BIKE_SHARING_TOBIKE_TRENTO:
+    agencyId: comune
+    region: trento
+    specificProperties:
+      validity: 1
+      notification-threshold: 5
+    filePath: /cache/bike/bs-bike_sharing_trento.json
+  BIKE_SHARING_TOBIKE_ROVERETO:
+    agencyId: comune
+    region: rovereto
+    specificProperties:
+      validity: 1
+      notification-threshold: 5
+    filePath: /cache/bike/bs-bike_sharing_rovereto.json
+  BIKE_SHARING_TOBIKE_PERGINE_VALSUGANA:
+    agencyId: comune
+    region: PERGINE_VALSUGANA
+    specificProperties:
+      validity: 1
+      notification-threshold: 5
+    filePath: /cache/bike/bs-bike_sharing_tobike_pergine_valsugana.json
+    
+areaData:
+  comune-trento:
+    agencyId: comune
+    region: trento
+    type: CAR
+    costfilePath: /cache/areainfo/comune-trento-costs.json
+    datafilePath: /cache/areainfo/comune-trento-data.json
+    pointsfilePath: /cache/areainfo/comune-trento-points.json
+  comune-rovereto:
+     agencyId: comune
+     region: rovereto
+     type: CAR
+     costfilePath: /cache/areainfo/comune-rovereto-costs.json
+     datafilePath: /cache/areainfo/comune-rovereto-data.json
+     pointsfilePath: /cache/areainfo/comune-rovereto-points.json
+     
+taxi:
+ comune-trento:
+    agencyId: taxi_trento
+    region: trento
+    filePath: /cache/taxi/taxi-trento.json
+    contactfilePath: /cache/taxi/contacts.json

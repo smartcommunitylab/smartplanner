@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<configuration scan="true">
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <charset>utf-8</charset>
+            <!--<Pattern>[%p] %c - %m%n</Pattern>-->
+<!--             <pattern>%-20(%d{HH:mm:ss,SSS} [%thread]) %-5level %logger{32} - %msg%n</pattern> -->
+            <pattern>%-20(%d{yyyy-MM-dd HH:mm:ss,SSS}) %-5level %logger{32} - %msg%n</pattern>
+        </encoder>
+    </appender>
+    <logger name="it.sayservice.platform.smartplanner" level="INFO"/>
+
+    <!--<logger name="org.springframework.data" level="DEBUG"/>-->
+
+    <logger name="org.glassfish.jersey" level="WARN"/>
+    <logger name="org.apache" level="WARN"/>
+    <logger name="org.springframework" level="INFO"/>
+
+    <contextListener class="ch.qos.logback.classic.jul.LevelChangePropagator">
+        <resetJUL>true</resetJUL>
+    </contextListener>
+
+    <root level="ERROR">
+        <appender-ref ref="CONSOLE"/>
+    </root>
+
+</configuration>
