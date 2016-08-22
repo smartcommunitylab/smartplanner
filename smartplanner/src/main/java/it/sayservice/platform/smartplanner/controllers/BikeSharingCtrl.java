@@ -17,6 +17,23 @@
 
 package it.sayservice.platform.smartplanner.controllers;
 
+import io.swagger.annotations.ApiParam;
+import it.sayservice.platform.smartplanner.configurations.ConfigurationManager;
+import it.sayservice.platform.smartplanner.configurations.MongoRouterMapper;
+import it.sayservice.platform.smartplanner.core.adapter.OpenToProprietaryBikeStationAdapter;
+import it.sayservice.platform.smartplanner.core.adapter.ProprietaryToOpenBikeStationAdapter;
+import it.sayservice.platform.smartplanner.data.message.Position;
+import it.sayservice.platform.smartplanner.data.message.otpbeans.Parking;
+import it.sayservice.platform.smartplanner.exception.SmartPlannerException;
+import it.sayservice.platform.smartplanner.model.BikeStation;
+import it.sayservice.platform.smartplanner.model.DynamicBikeStation;
+import it.sayservice.platform.smartplanner.model.Response;
+import it.sayservice.platform.smartplanner.model.bikerental.CityBikesBikeStation;
+import it.sayservice.platform.smartplanner.model.bikerental.JCDecauxBikeStation;
+import it.sayservice.platform.smartplanner.mongo.repos.BikeStationRepository;
+import it.sayservice.platform.smartplanner.utils.Constants;
+import it.sayservice.platform.smartplanner.utils.RepositoryUtils;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,23 +57,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.mongodb.QueryBuilder;
-
-import io.swagger.annotations.ApiParam;
-import it.sayservice.platform.smartplanner.configurations.ConfigurationManager;
-import it.sayservice.platform.smartplanner.configurations.MongoRouterMapper;
-import it.sayservice.platform.smartplanner.core.adapter.OpenToProprietaryBikeStationAdapter;
-import it.sayservice.platform.smartplanner.core.adapter.ProprietaryToOpenBikeStationAdapter;
-import it.sayservice.platform.smartplanner.data.message.Position;
-import it.sayservice.platform.smartplanner.data.message.otpbeans.Parking;
-import it.sayservice.platform.smartplanner.exception.SmartPlannerException;
-import it.sayservice.platform.smartplanner.model.BikeStation;
-import it.sayservice.platform.smartplanner.model.DynamicBikeStation;
-import it.sayservice.platform.smartplanner.model.Response;
-import it.sayservice.platform.smartplanner.model.bikerental.CityBikesBikeStation;
-import it.sayservice.platform.smartplanner.model.bikerental.JCDecauxBikeStation;
-import it.sayservice.platform.smartplanner.mongo.repos.BikeStationRepository;
-import it.sayservice.platform.smartplanner.utils.Constants;
-import it.sayservice.platform.smartplanner.utils.RepositoryUtils;
 
 @Controller
 public class BikeSharingCtrl {
@@ -200,7 +200,8 @@ public class BikeSharingCtrl {
 						}
 
 						Parking parking = new Parking();
-						parking.setName(station.getStationId().getId());
+//						parking.setName(station.getStationId().getId());
+						parking.setName(station.getBikeStationName());
 						parking.setDescription(station.getFullName());
 						// parking.setSlotsAvailable(alert.getPosts());
 						parking.setSlotsAvailable(places);
@@ -455,7 +456,8 @@ public class BikeSharingCtrl {
 
 			parking = new Parking();
 			
-			parking.setName(bikeStation.getStationId().getId());
+//			parking.setName(bikeStation.getStationId().getId());
+			parking.setName(bikeStation.getBikeStationName());
 			parking.setDescription(bikeStation.getFullName());
 			parking.setSlotsAvailable(places);
 			parking.setSlotsTotal(bikeStation.getPosts());

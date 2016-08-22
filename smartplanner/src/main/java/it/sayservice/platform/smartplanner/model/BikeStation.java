@@ -17,13 +17,13 @@
 
 package it.sayservice.platform.smartplanner.model;
 
+import it.sayservice.platform.smartplanner.data.message.StopId;
+
 import java.util.Arrays;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.GeoSpatialIndexed;
 import org.springframework.data.mongodb.core.index.Indexed;
-
-import it.sayservice.platform.smartplanner.data.message.StopId;
 
 public class BikeStation {
 
@@ -38,6 +38,8 @@ public class BikeStation {
 	private int availableSharingVehicles;
 	private int posts;
 	private boolean monitored;
+	
+	private String stationName;
 
 	/**
 	 * @param stationId
@@ -124,6 +126,24 @@ public class BikeStation {
 	public void setMonitored(boolean monitored) {
 		this.monitored = monitored;
 	}
+
+	public String getStationName() {
+		return stationName;
+	}
+
+	public void setStationName(String stationName) {
+		this.stationName = stationName;
+	}
+	
+	public String getBikeStationName() {
+		if (stationName != null) {
+			return stationName;
+		} else if (stationId != null) {
+			return stationId.getId();
+		} else {
+			return id;
+		}
+	}	
 
 	@Override
 	public String toString() {

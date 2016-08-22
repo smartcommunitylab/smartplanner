@@ -17,13 +17,13 @@
 
 package it.sayservice.platform.smartplanner.model;
 
+import it.sayservice.platform.smartplanner.data.message.StopId;
+
 import java.util.Arrays;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.GeoSpatialIndexed;
 import org.springframework.data.mongodb.core.index.Indexed;
-
-import it.sayservice.platform.smartplanner.data.message.StopId;
 
 public class CarStation {
 
@@ -42,6 +42,8 @@ public class CarStation {
 
 	private String fixedCost;
 	private String costDefinition;
+	
+	private String stationName;
 
 	/**
 	 * @param stationId
@@ -156,6 +158,24 @@ public class CarStation {
 
 	public void setCostDefinition(String costDefinition) {
 		this.costDefinition = costDefinition;
+	}
+
+	public String getStationName() {
+		return stationName;
+	}
+
+	public void setStationName(String stationName) {
+		this.stationName = stationName;
+	}
+	
+	public String getCarStationName() {
+		if (stationName != null) {
+			return stationName;
+		} else if (stationId != null) {
+			return stationId.getId();
+		} else {
+			return id;
+		}
 	}
 
 	@Override

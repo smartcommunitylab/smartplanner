@@ -17,6 +17,17 @@
 
 package it.sayservice.platform.smartplanner.controllers;
 
+import it.sayservice.platform.smartplanner.configurations.ConfigurationManager;
+import it.sayservice.platform.smartplanner.configurations.MongoRouterMapper;
+import it.sayservice.platform.smartplanner.data.message.otpbeans.Parking;
+import it.sayservice.platform.smartplanner.exception.SmartPlannerException;
+import it.sayservice.platform.smartplanner.model.CarStation;
+import it.sayservice.platform.smartplanner.model.DynamicCarStation;
+import it.sayservice.platform.smartplanner.model.Response;
+import it.sayservice.platform.smartplanner.mongo.repos.CarStationRepository;
+import it.sayservice.platform.smartplanner.utils.Constants;
+import it.sayservice.platform.smartplanner.utils.RepositoryUtils;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,17 +48,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.mongodb.QueryBuilder;
-
-import it.sayservice.platform.smartplanner.configurations.ConfigurationManager;
-import it.sayservice.platform.smartplanner.configurations.MongoRouterMapper;
-import it.sayservice.platform.smartplanner.data.message.otpbeans.Parking;
-import it.sayservice.platform.smartplanner.exception.SmartPlannerException;
-import it.sayservice.platform.smartplanner.model.CarStation;
-import it.sayservice.platform.smartplanner.model.DynamicCarStation;
-import it.sayservice.platform.smartplanner.model.Response;
-import it.sayservice.platform.smartplanner.mongo.repos.CarStationRepository;
-import it.sayservice.platform.smartplanner.utils.Constants;
-import it.sayservice.platform.smartplanner.utils.RepositoryUtils;
 
 @Controller
 public class CarParkingCtrl {
@@ -161,7 +161,8 @@ public class CarParkingCtrl {
 						}
 					}
 					Parking parking = new Parking();
-					parking.setName(station.getStationId().getId());
+//					parking.setName(station.getStationId().getId());
+					parking.setName(station.getCarStationName());
 					parking.setDescription(station.getFullName());
 					parking.setSlotsAvailable(places);
 					parking.setSlotsTotal(station.getPosts());
@@ -225,7 +226,8 @@ public class CarParkingCtrl {
 					}
 
 					Parking parking = new Parking();
-					parking.setName(station.getStationId().getId());
+//					parking.setName(station.getStationId().getId());
+					parking.setName(station.getCarStationName());
 					parking.setDescription(station.getFullName());
 					parking.setSlotsAvailable(places);
 					parking.setSlotsTotal(station.getPosts());

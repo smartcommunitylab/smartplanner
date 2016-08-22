@@ -17,6 +17,30 @@
 
 package it.sayservice.platform.smartplanner.utils;
 
+import it.sayservice.platform.smartplanner.areainfo.CostData;
+import it.sayservice.platform.smartplanner.configurations.ConfigurationManager;
+import it.sayservice.platform.smartplanner.configurations.RouterConfig;
+import it.sayservice.platform.smartplanner.data.message.Geometery;
+import it.sayservice.platform.smartplanner.data.message.Itinerary;
+import it.sayservice.platform.smartplanner.data.message.Leg;
+import it.sayservice.platform.smartplanner.data.message.LegGeometery;
+import it.sayservice.platform.smartplanner.data.message.Position;
+import it.sayservice.platform.smartplanner.data.message.StopId;
+import it.sayservice.platform.smartplanner.data.message.TType;
+import it.sayservice.platform.smartplanner.data.message.Transport;
+import it.sayservice.platform.smartplanner.data.message.alerts.AlertAccident;
+import it.sayservice.platform.smartplanner.data.message.alerts.AlertDelay;
+import it.sayservice.platform.smartplanner.data.message.alerts.AlertParking;
+import it.sayservice.platform.smartplanner.data.message.alerts.AlertRoad;
+import it.sayservice.platform.smartplanner.data.message.alerts.AlertStrike;
+import it.sayservice.platform.smartplanner.data.message.alerts.AlertType;
+import it.sayservice.platform.smartplanner.data.message.alerts.CreatorType;
+import it.sayservice.platform.smartplanner.model.BikeStation;
+import it.sayservice.platform.smartplanner.model.CarStation;
+import it.sayservice.platform.smartplanner.model.DynamicBikeStation;
+import it.sayservice.platform.smartplanner.model.DynamicCarStation;
+import it.sayservice.platform.smartplanner.otp.SmartPlannerUtils;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -44,30 +68,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.google.common.collect.Lists;
-
-import it.sayservice.platform.smartplanner.areainfo.CostData;
-import it.sayservice.platform.smartplanner.configurations.ConfigurationManager;
-import it.sayservice.platform.smartplanner.configurations.RouterConfig;
-import it.sayservice.platform.smartplanner.data.message.Geometery;
-import it.sayservice.platform.smartplanner.data.message.Itinerary;
-import it.sayservice.platform.smartplanner.data.message.Leg;
-import it.sayservice.platform.smartplanner.data.message.LegGeometery;
-import it.sayservice.platform.smartplanner.data.message.Position;
-import it.sayservice.platform.smartplanner.data.message.StopId;
-import it.sayservice.platform.smartplanner.data.message.TType;
-import it.sayservice.platform.smartplanner.data.message.Transport;
-import it.sayservice.platform.smartplanner.data.message.alerts.AlertAccident;
-import it.sayservice.platform.smartplanner.data.message.alerts.AlertDelay;
-import it.sayservice.platform.smartplanner.data.message.alerts.AlertParking;
-import it.sayservice.platform.smartplanner.data.message.alerts.AlertRoad;
-import it.sayservice.platform.smartplanner.data.message.alerts.AlertStrike;
-import it.sayservice.platform.smartplanner.data.message.alerts.AlertType;
-import it.sayservice.platform.smartplanner.data.message.alerts.CreatorType;
-import it.sayservice.platform.smartplanner.model.BikeStation;
-import it.sayservice.platform.smartplanner.model.CarStation;
-import it.sayservice.platform.smartplanner.model.DynamicBikeStation;
-import it.sayservice.platform.smartplanner.model.DynamicCarStation;
-import it.sayservice.platform.smartplanner.otp.SmartPlannerUtils;
 
 /**
  * Helper class for constructing/filtering itinerary.
@@ -316,7 +316,12 @@ public class ItineraryBuildHelper {
 						|| userMode.equalsIgnoreCase(TType.PARK_AND_RIDE.name())) {
 					// if (stopId != null && !stopId.getAgencyId().isEmpty()) {
 					if (stopId != null) {
-						name = stopId.getId();
+						if (stopId.getExtra() != null && stopId.getExtra().containsKey("stationName")) {
+							name = (String)stopId.getExtra().get("stationName");
+							stopId.getExtra().remove("stationName");
+						} else {
+							name = stopId.getId();
+						}
 					}
 				}
 			}
@@ -378,6 +383,8 @@ public class ItineraryBuildHelper {
 			userMode = String.valueOf(preProcessParams.get("userMode"));
 		}
 
+		Map<String, Object> extra = new TreeMap<String, Object>();
+		
 		if (agencyId != null && id != null) {
 			stopId = new StopId(agencyId, id);
 		} else if (mode.equalsIgnoreCase("car")) {
@@ -385,7 +392,7 @@ public class ItineraryBuildHelper {
 			// reset/create stopId by looking at requestedMode.
 			stopId = null;
 			CarStation cs = null;
-			Map<String, Object> extra = new TreeMap<String, Object>();
+
 			// if requested mode is Shared Car
 			if (userMode.equalsIgnoreCase(TType.SHAREDCAR.name())) {
 				if (from) {
@@ -421,6 +428,7 @@ public class ItineraryBuildHelper {
 			}
 			if (cs != null) {
 				extra.put("parkAndRide", cs.isParkAndRide());
+				extra.put("stationName", cs.getCarStationName());
 			}
 
 			if (stopId != null) {
@@ -445,7 +453,8 @@ public class ItineraryBuildHelper {
 						boolean cars = dcs.getCars() != -1 && dcs.getCars() < carStationThreshold;
 
 						if (posts || cars) {
-							String displayId = cs.getStationId().getId();
+//							String displayId = cs.getStationId().getId();
+							String displayId = cs.getCarStationName();
 							AlertParking alert = new AlertParking();
 							alert.setId(cs.getId());
 							if (isCarSharing) {
@@ -500,6 +509,10 @@ public class ItineraryBuildHelper {
 					}
 				}
 			}
+			
+			if (bs != null) {
+				extra.put("stationName", bs.getBikeStationName());
+			}
 
 			if (stopId != null) {
 				/** if required, create alert. **/
@@ -522,7 +535,8 @@ public class ItineraryBuildHelper {
 						boolean f = from && dbs.getBikes() < bikeStationThreshold;
 						boolean t = !from && dbs.getPosts() < bikeStationThreshold;
 						if (f || t) {
-							String displayId = bs.getStationId().getId();
+//							String displayId = bs.getStationId().getId();
+							String displayId = bs.getBikeStationName();
 							AlertParking alert = new AlertParking();
 							alert.setId(dbs.getId());
 							alert.setDescription("Bike Station " + displayId + ": available bikes = " + dbs.getBikes()
