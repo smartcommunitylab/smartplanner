@@ -17,16 +17,6 @@
 
 package it.sayservice.platform.smartplanner.multimodal.modes;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.codehaus.jackson.JsonNode;
-import org.codehaus.jackson.map.ObjectMapper;
-
 import it.sayservice.platform.smartplanner.data.message.Itinerary;
 import it.sayservice.platform.smartplanner.data.message.Leg;
 import it.sayservice.platform.smartplanner.data.message.Position;
@@ -36,6 +26,16 @@ import it.sayservice.platform.smartplanner.utils.Constants;
 import it.sayservice.platform.smartplanner.utils.ItineraryBuildHelper;
 import it.sayservice.platform.smartplanner.utils.OTPConnector;
 import it.sayservice.platform.smartplanner.utils.RecurrentUtil;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.codehaus.jackson.JsonNode;
+import org.codehaus.jackson.map.ObjectMapper;
 
 /**
  * WalkOnly independant mode.
@@ -98,6 +98,10 @@ public class WalkOnly {
 		otpMap.put(Constants.OTP_RQ_OPTIMIZE, Constants.OPTIMIZATION.QUICK.name());
 		otpMap.put(Constants.OTP_RQ_ITNS, "3");
 		otpMap.put(Constants.OTP_RQ_ARRIVEBY, "false");
+		
+		if (parameters.get(Constants.WHEELCHAIR) != null) {
+			otpMap.put(Constants.WHEELCHAIR, String.valueOf(parameters.get(Constants.WHEELCHAIR)));
+		}		
 
 		// get SmartUser requirements, map it to OTP format.
 		if (parameters.get(Constants.SP_RQ_FROM) != null) {

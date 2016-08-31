@@ -17,6 +17,18 @@
 
 package it.sayservice.platform.smartplanner.multimodal.modes;
 
+import it.sayservice.platform.smartplanner.data.message.Itinerary;
+import it.sayservice.platform.smartplanner.data.message.Leg;
+import it.sayservice.platform.smartplanner.data.message.Position;
+import it.sayservice.platform.smartplanner.data.message.RType;
+import it.sayservice.platform.smartplanner.data.message.TType;
+import it.sayservice.platform.smartplanner.utils.Constants;
+import it.sayservice.platform.smartplanner.utils.ItineraryBuildHelper;
+import it.sayservice.platform.smartplanner.utils.ItineraryComparatorLegSize;
+import it.sayservice.platform.smartplanner.utils.ItineraryComparatorWalk;
+import it.sayservice.platform.smartplanner.utils.OTPConnector;
+import it.sayservice.platform.smartplanner.utils.RecurrentUtil;
+
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -31,18 +43,6 @@ import java.util.Map;
 
 import org.codehaus.jackson.JsonNode;
 import org.codehaus.jackson.map.ObjectMapper;
-
-import it.sayservice.platform.smartplanner.data.message.Itinerary;
-import it.sayservice.platform.smartplanner.data.message.Leg;
-import it.sayservice.platform.smartplanner.data.message.Position;
-import it.sayservice.platform.smartplanner.data.message.RType;
-import it.sayservice.platform.smartplanner.data.message.TType;
-import it.sayservice.platform.smartplanner.utils.Constants;
-import it.sayservice.platform.smartplanner.utils.ItineraryBuildHelper;
-import it.sayservice.platform.smartplanner.utils.ItineraryComparatorLegSize;
-import it.sayservice.platform.smartplanner.utils.ItineraryComparatorWalk;
-import it.sayservice.platform.smartplanner.utils.OTPConnector;
-import it.sayservice.platform.smartplanner.utils.RecurrentUtil;
 
 /**
  * Bus Only independant mode.
@@ -174,6 +174,10 @@ public class BusOnly {
 			String maxWalkDistance = String.valueOf(parameters.get(Constants.SP_RQ_MAXWALK));
 			otpMap.put(Constants.OTP_RQ_MAXWALK, maxWalkDistance);
 		}
+		
+		if (parameters.get(Constants.WHEELCHAIR) != null) {
+			otpMap.put(Constants.WHEELCHAIR, String.valueOf(parameters.get(Constants.WHEELCHAIR)));
+		}			
 
 		// connect and fetch data.
 		String response = otpConnector.connect(router, otpMap);

@@ -17,23 +17,6 @@
 
 package it.sayservice.platform.smartplanner.multimodal.modes;
 
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.ws.rs.core.MediaType;
-
-import org.codehaus.jackson.JsonNode;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.geo.Distance;
-import org.springframework.data.geo.Metrics;
-import org.springframework.data.geo.Point;
-import org.springframework.stereotype.Component;
-
 import it.sayservice.platform.smartplanner.areainfo.CostData;
 import it.sayservice.platform.smartplanner.areainfo.SearchTime;
 import it.sayservice.platform.smartplanner.areainfo.SearchTime.SearchTimeSlot;
@@ -52,6 +35,21 @@ import it.sayservice.platform.smartplanner.utils.ItineraryBuildHelper;
 import it.sayservice.platform.smartplanner.utils.OTPConnector;
 import it.sayservice.platform.smartplanner.utils.RecurrentUtil;
 import it.sayservice.platform.smartplanner.utils.RepositoryUtils;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.ws.rs.core.MediaType;
+
+import org.codehaus.jackson.JsonNode;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.springframework.data.geo.Distance;
+import org.springframework.data.geo.Metrics;
+import org.springframework.data.geo.Point;
 
 /**
  * CarOnly independant Mode.
@@ -166,6 +164,11 @@ public class CarOnly {
 			String maxWalkDistance = String.valueOf(parameters.get(Constants.SP_RQ_MAXWALK));
 			otpMap.put(Constants.OTP_RQ_MAXWALK, maxWalkDistance);
 		}
+		
+		if (parameters.get(Constants.WHEELCHAIR) != null) {
+			otpMap.put(Constants.WHEELCHAIR, String.valueOf(parameters.get(Constants.WHEELCHAIR)));
+		}			
+		
 		// connect and fetch data.
 		String response = otpConnector.connect(router, otpMap);
 		response = fixRequestCoordinates(router, response, otpMap);

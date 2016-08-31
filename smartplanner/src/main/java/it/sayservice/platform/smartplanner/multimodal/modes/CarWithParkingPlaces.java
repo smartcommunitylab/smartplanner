@@ -17,26 +17,6 @@
 
 package it.sayservice.platform.smartplanner.multimodal.modes;
 
-import java.io.IOException;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-
-import javax.ws.rs.core.MediaType;
-
-import org.codehaus.jackson.JsonNode;
-import org.codehaus.jackson.map.ObjectMapper;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.geo.Point;
-import org.springframework.data.mongodb.core.MongoTemplate;
-
 import it.sayservice.platform.smartplanner.configurations.MongoRouterMapper;
 import it.sayservice.platform.smartplanner.data.message.Itinerary;
 import it.sayservice.platform.smartplanner.data.message.Leg;
@@ -56,6 +36,25 @@ import it.sayservice.platform.smartplanner.utils.ItineraryComparatorWalk;
 import it.sayservice.platform.smartplanner.utils.OTPConnector;
 import it.sayservice.platform.smartplanner.utils.RecurrentUtil;
 import it.sayservice.platform.smartplanner.utils.RepositoryUtils;
+
+import java.io.IOException;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+
+import javax.ws.rs.core.MediaType;
+
+import org.codehaus.jackson.JsonNode;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.springframework.data.geo.Point;
+import org.springframework.data.mongodb.core.MongoTemplate;
 
 /**
  * CAR WITH PARKING PLACE MODE.
@@ -226,6 +225,10 @@ public class CarWithParkingPlaces {
 		if (parameters.get(Constants.SP_RQ_MAXWALK) != null) {
 			maxWalkDistance = String.valueOf(parameters.get(Constants.SP_RQ_MAXWALK));
 		}
+		
+		if (parameters.get(Constants.WHEELCHAIR) != null) {
+			otpMap.put(Constants.WHEELCHAIR, String.valueOf(parameters.get(Constants.WHEELCHAIR)));
+		}			
 
 		/** invoke OTP **/
 
