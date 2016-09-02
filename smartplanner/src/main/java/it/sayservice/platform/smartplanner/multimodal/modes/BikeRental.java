@@ -305,7 +305,9 @@ public class BikeRental {
 					// connect and fetch data.
 					String response2 = otpConnector.connect(router, otpMap);
 					response2 = ItineraryBuildHelper.fixBicycleResponse(response2);
-
+					if (response2 == null) {
+						return new ArrayList<Itinerary>();
+					}	
 					// process data to smart planner format
 					stepTwoOutput = generatePlan(router, response2, preProcessParams);
 					// append legs of step2 to step1 and update other parameters
