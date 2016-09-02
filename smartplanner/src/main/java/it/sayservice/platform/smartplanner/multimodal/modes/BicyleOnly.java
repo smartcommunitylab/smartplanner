@@ -178,6 +178,9 @@ public class BicyleOnly {
 		// fix bicycle leg.
 		logger.info("fixing bicycle legs.");
 		response = ItineraryBuildHelper.fixBicycleResponse(response);
+		if (response == null) {
+			return new ArrayList<Itinerary>();
+		}		
 		// takes station and mode information
 		// to be used later.
 		HashMap<String, Object> preProcessParams = (HashMap<String, Object>) parameters.clone();
