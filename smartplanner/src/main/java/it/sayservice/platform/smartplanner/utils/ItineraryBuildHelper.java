@@ -1149,7 +1149,7 @@ public class ItineraryBuildHelper {
 
 		try {
 			JsonNode root = mapper.readTree(json);
-			if (!root.has("plan")) {
+			if (root == null || !root.has("plan")) {
 				return null;
 			}
 			JsonNode Itineraries = root.get("plan").get("itineraries");
