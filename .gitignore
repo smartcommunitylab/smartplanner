@@ -12,6 +12,9 @@ smartplanner/src/test/resources/scripts
 smartplanner/src/test/resources/shapes
 smartplanner/src/test/resources/tn-routemodel.json
 smartplanner/src/test/resources/exception-trips.json
+smartplanner/src/test/java/it/sayservice/platform/mockmvc
+smartplanner/src/test/java/it/sayservice/platform/smartplanner/annotated
+smartplanner/src/test/java/it/sayservice/platform/smartplanner/test
 smartplanner-beans/target/*
 smartplanner-beans/.classpath
 smartplanner-beans/.project
