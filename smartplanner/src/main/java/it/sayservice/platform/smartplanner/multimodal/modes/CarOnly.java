@@ -126,7 +126,7 @@ public class CarOnly {
 		otpMap.put(Constants.OTP_RQ_MODE, Constants.MODES.CAR.toString());
 		otpMap.put(Constants.OTP_RQ_MAXWALK, Constants.NO_WALK);
 		otpMap.put(Constants.OTP_RQ_OPTIMIZE, Constants.OPTIMIZATION.QUICK.toString());
-		otpMap.put(Constants.OTP_RQ_ITNS, "3");
+		otpMap.put(Constants.OTP_RQ_ITNS, "1");
 
 		// get SmartUser requirements, map it to OTP format.
 		processRequestCoordinates(router, parameters, otpMap);
@@ -154,11 +154,11 @@ public class CarOnly {
 			}
 		}
 
-		if (parameters.get(Constants.SP_RQ_NUM_ITNS) != null) {
-			String numItineraries = String.valueOf(parameters.get(Constants.SP_RQ_NUM_ITNS));
-			otpMap.put(Constants.OTP_RQ_ITNS, numItineraries);
-
-		}
+//		if (parameters.get(Constants.SP_RQ_NUM_ITNS) != null) {
+//			String numItineraries = String.valueOf(parameters.get(Constants.SP_RQ_NUM_ITNS));
+//			otpMap.put(Constants.OTP_RQ_ITNS, numItineraries);
+//
+//		}
 		// maximum walking distance
 		if (parameters.get(Constants.SP_RQ_MAXWALK) != null) {
 			String maxWalkDistance = String.valueOf(parameters.get(Constants.SP_RQ_MAXWALK));

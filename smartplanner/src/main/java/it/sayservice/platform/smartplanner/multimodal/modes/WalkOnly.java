@@ -96,7 +96,7 @@ public class WalkOnly {
 		otpMap.put(Constants.OTP_RQ_MODE, Constants.MODES.WALK.toString());
 		otpMap.put(Constants.OTP_RQ_MAXWALK, Constants.WALK_ONLY);
 		otpMap.put(Constants.OTP_RQ_OPTIMIZE, Constants.OPTIMIZATION.QUICK.name());
-		otpMap.put(Constants.OTP_RQ_ITNS, "3");
+		otpMap.put(Constants.OTP_RQ_ITNS, "1");
 		otpMap.put(Constants.OTP_RQ_ARRIVEBY, "false");
 		
 		if (parameters.get(Constants.WHEELCHAIR) != null) {
@@ -154,11 +154,11 @@ public class WalkOnly {
 			}
 		}
 
-		if (parameters.get(Constants.SP_RQ_NUM_ITNS) != null) {
-			String numItineraries = String.valueOf(parameters.get(Constants.SP_RQ_NUM_ITNS));
-			otpMap.put(Constants.OTP_RQ_ITNS, numItineraries);
-
-		}
+//		if (parameters.get(Constants.SP_RQ_NUM_ITNS) != null) {
+//			String numItineraries = String.valueOf(parameters.get(Constants.SP_RQ_NUM_ITNS));
+//			otpMap.put(Constants.OTP_RQ_ITNS, numItineraries);
+//
+//		}
 		// maximum walking distance
 		if (parameters.get(Constants.SP_RQ_MAXWALK) != null) {
 			String maxWalkDistance = String.valueOf(parameters.get(Constants.SP_RQ_MAXWALK));
