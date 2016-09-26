@@ -1,1 +1,10 @@
 smartplanner/target/*
+smartplanner/.classpath
+smartplanner/.settings
+smartplanner/.project
+smartplanner/src/test
+smartplanner-beans/target/*
+smartplanner-beans/.classpath
+smartplanner-beans/.project
+smartplanner-beans/.settings
+smartplanner-beans/src/test
