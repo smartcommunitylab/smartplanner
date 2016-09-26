@@ -479,7 +479,7 @@ public class RepositoryUtils {
 
 		// get requested date from user request.
 		SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy hh:mmaa", Locale.ITALY);
-		String date = userParams.get("date") + " " + userParams.get("departureTime");
+		String date = userParams.get("date") + " " + userParams.get(Constants.SP_RQ_DEPTIME);
 		java.util.Date reqDate;
 		try {
 			reqDate = (java.util.Date) formatter.parse(date);

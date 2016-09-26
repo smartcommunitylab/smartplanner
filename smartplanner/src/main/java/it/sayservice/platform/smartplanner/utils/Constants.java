@@ -33,6 +33,7 @@ public class Constants {
 	public static final String OTP_RQ_TO = "toPlace";
 	public static final String OTP_RQ_MODE = "mode";
 	public static final String OTP_RQ_TIME = "time";
+	public static final String OTP_RQ_DEP_TIME = "departureTime";
 	public static final String OTP_RQ_DATE = "date";
 	public static final String OTP_RQ_ARRIVEBY = "arriveBy";
 	public static final String OTP_RQ_OPTIMIZE = "optimize";

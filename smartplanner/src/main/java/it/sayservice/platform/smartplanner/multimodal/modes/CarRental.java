@@ -527,7 +527,7 @@ public class CarRental {
 
 		try {
 			// get maxReachTime in milliseconds.
-			String requestedTime = localParams.get("date") + " " + localParams.get("departureTime");
+			String requestedTime = localParams.get("date") + " " + localParams.get(Constants.SP_RQ_DEPTIME);
 			DateFormat maxTimeformatter = new SimpleDateFormat("MM/dd/yyyy hh:mmaa", Locale.ITALY);
 			Date reccurReqTime = (Date) maxTimeformatter.parse(requestedTime);
 
@@ -552,7 +552,7 @@ public class CarRental {
 					Long time = searchItn.get(searchItn.size() - 1).getEndtime();
 					Date strDate = new Date(time);
 					localParams.put("date", dateFormatter.format(strDate));
-					localParams.put("departureTime", timeFormatter.format(strDate));
+					localParams.put(Constants.SP_RQ_DEPTIME, timeFormatter.format(strDate));
 				}
 			}
 

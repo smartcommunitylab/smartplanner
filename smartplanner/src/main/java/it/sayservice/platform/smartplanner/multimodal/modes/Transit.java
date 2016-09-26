@@ -324,7 +324,7 @@ public class Transit {
 
 		try {
 			// get maxReachTime in milliseconds.
-			String requestedTime = localParams.get("date") + " " + localParams.get("departureTime");
+			String requestedTime = localParams.get("date") + " " + localParams.get(Constants.SP_RQ_DEPTIME);
 			DateFormat maxTimeformatter = new SimpleDateFormat("MM/dd/yyyy hh:mmaa", Locale.ITALY);
 			Date reccurReqTime = (Date) maxTimeformatter.parse(requestedTime);
 
@@ -349,7 +349,7 @@ public class Transit {
 					Long time = searchItn.get(searchItn.size() - 1).getStartime();
 					// in any case shift by 10 mins
 					Date strDate = new Date(time + 10 * 60 * 1000);
-					localParams.put("departureTime", formatter.format(strDate));
+					localParams.put(Constants.SP_RQ_DEPTIME, formatter.format(strDate));
 				}
 			}
 

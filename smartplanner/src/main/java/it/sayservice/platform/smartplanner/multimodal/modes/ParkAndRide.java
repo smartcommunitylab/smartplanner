@@ -217,8 +217,8 @@ public class ParkAndRide {
 		if (parameters.get("arrivalTime") != null) {
 			arriveBy = "true";
 			time = String.valueOf(parameters.get("arrivalTime"));
-		} else if (parameters.get("departureTime") != null) {
-			time = String.valueOf(parameters.get("departureTime"));
+		} else if (parameters.get(Constants.SP_RQ_DEPTIME) != null) {
+			time = String.valueOf(parameters.get(Constants.SP_RQ_DEPTIME));
 		}
 		if (parameters.get("routePreferences") != null) {
 			RType preference = (RType) parameters.get("routePreferences");
@@ -337,7 +337,7 @@ public class ParkAndRide {
 			for (Itinerary it : stepOneOutput) {
 				String newTime = helper.convertMillisToTime(it.getEndtime()).replaceAll("\\s", "").toLowerCase();
 				otpMap.put(Constants.SP_RQ_TIME, newTime);
-				otpMap.put(Constants.OTP_RQ_DEP_TIME, newTime);
+				otpMap.put(Constants.SP_RQ_DEPTIME, newTime);
 				otpMap.put(Constants.SP_RQ_DATE, helper.convertMillisToDate(it.getEndtime()).replaceAll("\\s", "").toLowerCase());
 
 				Leg leg = it.getLeg().get(it.getLeg().size() - 1);
@@ -464,7 +464,7 @@ public class ParkAndRide {
 			userRequestWD.put("from", parameters.get("from"));
 			userRequestWD.put("to", parameters.get("to"));
 			userRequestWD.put("date", wednesday);
-			userRequestWD.put("departureTime", parameters.get("time"));
+			userRequestWD.put(Constants.SP_RQ_DEPTIME, parameters.get("time"));
 			userRequestWD.put("routePreferences", parameters.get("routePreferences"));
 			userRequestWD.put("numItineraries", 1);
 
@@ -503,7 +503,7 @@ public class ParkAndRide {
 
 		try {
 			// get maxReachTime in milliseconds.
-			String requestedTime = localParams.get("date") + " " + localParams.get("departureTime");
+			String requestedTime = localParams.get("date") + " " + localParams.get(Constants.SP_RQ_DEPTIME);
 			DateFormat maxTimeformatter = new SimpleDateFormat("MM/dd/yyyy hh:mmaa", Locale.ITALY);
 			Date reccurReqTime = (Date) maxTimeformatter.parse(requestedTime);
 
@@ -528,7 +528,7 @@ public class ParkAndRide {
 					Long time = searchItn.get(searchItn.size() - 1).getEndtime();
 					Date strDate = new Date(time);
 					localParams.put("date", dateFormatter.format(strDate));
-					localParams.put("departureTime", timeFormatter.format(strDate));
+					localParams.put(Constants.SP_RQ_DEPTIME, timeFormatter.format(strDate));
 				}
 			}
 
