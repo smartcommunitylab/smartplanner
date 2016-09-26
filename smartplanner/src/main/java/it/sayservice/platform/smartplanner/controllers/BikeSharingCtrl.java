@@ -108,7 +108,7 @@ public class BikeSharingCtrl {
 
 	@RequestMapping(method = RequestMethod.POST, value = "/{router}/rest/data/bikesharing")
 	public @ResponseBody
-	void updateBikeSharing(@PathVariable String router, @ApiParam(value = "List of bike stations") @RequestBody List<BikeStation> lbs) {
+	void addBikeSharing(@PathVariable String router, @ApiParam(value = "List of bike stations") @RequestBody List<BikeStation> lbs) {
 
 		BikeStationRepository bikeStationRepository = mongoRouterMapper.getBikeStationRepository(router);
 
@@ -121,7 +121,7 @@ public class BikeSharingCtrl {
 				bs.setId(bs.getStationId().getId() + "@" + bs.getStationId().getAgencyId());
 				bikeStationRepository.save(bs);
 			}
-			template.remove(new Query(), Constants.ALERT_BIKE_REPO);
+//			template.remove(new Query(), Constants.ALERT_BIKE_REPO);
 		}
 	}
 
