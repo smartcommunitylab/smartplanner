@@ -259,16 +259,16 @@ public class ParkAndRide {
 				break;
 			}
 
-			otpMapCar.put("date", date);
-			otpMapCar.put("time", time);
-			otpMapCar.put("arriveBy", arriveBy);
-			otpMapCar.put("optimize", "QUICK");
-			otpMapCar.put("numItineraries", "1");
-			otpMapCar.put("maxWalkDistance", "0");
-			otpMapCar.put("mode", "CAR");
-			otpMapCar.put("fromPlace", source);
-			otpMapCar.put("toPlace", cs.getPosition()[0] + "," + cs.getPosition()[1]);
-			otpMapCar.put("fromPlace", source);
+			otpMapCar.put(Constants.OTP_RQ_DATE, date);
+			otpMapCar.put(Constants.OTP_RQ_TIME, time);
+			otpMapCar.put(Constants.OTP_RQ_ARRIVEBY, arriveBy);
+			otpMapCar.put(Constants.OTP_RQ_OPTIMIZE, "QUICK");
+			otpMapCar.put(Constants.OTP_RQ_ITNS, "1");
+			otpMapCar.put(Constants.OTP_RQ_MAXWALK, "0");
+			otpMapCar.put(Constants.OTP_RQ_MODE, "CAR");
+			otpMapCar.put(Constants.OTP_RQ_FROM, source);
+			otpMapCar.put(Constants.OTP_RQ_TO, cs.getPosition()[0] + "," + cs.getPosition()[1]);
+
 
 			String responseOne = null;
 			// if source is present within StreetLocation repository, get
@@ -276,7 +276,7 @@ public class ParkAndRide {
 			StreetLocation existingLocation = repositoryUtils.existStreetLocation(router, sX, sY);
 			if (existingLocation != null) {
 				// update source.
-				otpMapCar.put("fromPlace", existingLocation.getPosition()[0] + "," + existingLocation.getPosition()[1]);
+				otpMapCar.put(Constants.OTP_RQ_FROM, existingLocation.getPosition()[0] + "," + existingLocation.getPosition()[1]);
 				// connect and fetch data.
 				responseOne = otpConnector.connect(router, otpMapCar);
 
@@ -314,8 +314,8 @@ public class ParkAndRide {
 			// takes station and mode information
 			// to be used later.
 			HashMap<String, Object> preProcessParams = (HashMap<String, Object>) parameters.clone();
-			preProcessParams.put("toStation", cs);
-			preProcessParams.put("userMode", TType.CARWITHPARKING.name());
+			preProcessParams.put(Constants.SP_RQ_TOSTATION, cs);
+			preProcessParams.put(Constants.SP_RQ_USERMODE, TType.CARWITHPARKING.name());
 			preProcessParams.put(Constants.ROUTER, router);
 
 			// process data to smart planner format
@@ -323,23 +323,22 @@ public class ParkAndRide {
 
 			// create map for otp invocation from bike station to 'To'
 			// invoke OTP and get List Itinerary step2
-			otpMap.put("arriveBy", arriveBy);
-			otpMap.put("optimize", optimize);
-			otpMap.put("numItineraries", numItineraries);
-			otpMap.put("maxWalkDistance", maxWalkDistance);
-			otpMap.put("mode", parameters.containsKey("extraTransport") ? (String) parameters.get("extraTransport")
+			otpMap.put(Constants.OTP_RQ_ARRIVEBY, arriveBy);
+			otpMap.put(Constants.OTP_RQ_OPTIMIZE, optimize);
+			otpMap.put(Constants.OTP_RQ_ITNS, numItineraries);
+			otpMap.put(Constants.SP_RQ_MAXWALK, maxWalkDistance);
+			otpMap.put(Constants.OTP_RQ_MODE, parameters.containsKey("extraTransport") ? (String) parameters.get("extraTransport")
 					: Constants.MODES.TRANSIT.toString());
-			otpMap.put("from",
+			otpMap.put(Constants.SP_RQ_FROM,
 					new Position("", cs.getStationId(), "", "" + cs.getPosition()[0], "" + cs.getPosition()[1]));
-			otpMap.put("to", (Position) parameters.get("to"));
+			otpMap.put(Constants.SP_RQ_TO, (Position) parameters.get("to"));
 
 			// update time with end time of first trip.
 			for (Itinerary it : stepOneOutput) {
-				time = helper.convertMillisToTime(it.getEndtime()).replaceAll("\\s", "").toLowerCase();
-				date = helper.convertMillisToDate(it.getEndtime()).replaceAll("\\s", "").toLowerCase();
-				otpMap.put("time", time);
-				otpMap.put("departureTime", time);
-				otpMap.put("date", date);
+				String newTime = helper.convertMillisToTime(it.getEndtime()).replaceAll("\\s", "").toLowerCase();
+				otpMap.put(Constants.SP_RQ_TIME, newTime);
+				otpMap.put(Constants.OTP_RQ_DEP_TIME, newTime);
+				otpMap.put(Constants.SP_RQ_DATE, helper.convertMillisToDate(it.getEndtime()).replaceAll("\\s", "").toLowerCase());
 
 				Leg leg = it.getLeg().get(it.getLeg().size() - 1);
 
