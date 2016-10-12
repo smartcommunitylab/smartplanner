@@ -18,67 +18,29 @@
 package it.sayservice.platform.smartplanner.areainfo;
 
 import java.util.Calendar;
-import java.util.HashMap;
-import java.util.Map;
 
 public class SearchTime {
 
-	private Map<Integer, SearchTimeSlot[]> dayMap = new HashMap<Integer, SearchTimeSlot[]>();
+	public SearchTimeWeekDayList weekDayList = new SearchTimeWeekDayList();
 
-	public SearchTimeSlot compute(long timestamp) {
-		Calendar c = Calendar.getInstance();
-		c.setTimeInMillis(timestamp);
-		int day = c.get(Calendar.DAY_OF_WEEK);
-		int hour = c.get(Calendar.HOUR_OF_DAY);
+	public TimeAndRangeSlot compute(long timestamp) {
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTimeInMillis(timestamp);
+		int day = calendar.get(Calendar.DAY_OF_WEEK);
+		int hour = calendar.get(Calendar.HOUR_OF_DAY);
+
 		try {
-			return dayMap.get(day)[hour];
+			return weekDayList.get(day).getTimeSlot(calendar);
 		} catch (Exception e) {
 			return null;
 		}
 	}
 
-	public Map<Integer, SearchTimeSlot[]> getDayMap() {
-		return dayMap;
+	public SearchTimeWeekDayList getWeekDayList() {
+		return weekDayList;
 	}
 
-	public void setDayMap(Map<Integer, SearchTimeSlot[]> dayMap) {
-		this.dayMap = dayMap;
-	}
-
-	public static class SearchTimeSlot {
-		private int min;
-		private int max;
-
-		public SearchTimeSlot() {
-			super();
-		}
-
-		public SearchTimeSlot(int min, int max) {
-			super();
-			this.min = min;
-			this.max = max;
-		}
-
-		public int getMin() {
-			return min;
-		}
-
-		public void setMin(int min) {
-			this.min = min;
-		}
-
-		public int getMax() {
-			return max;
-		}
-
-		public void setMax(int max) {
-			this.max = max;
-		}
-
-		@Override
-		public String toString() {
-			return min + "," + max;
-		}
-
+	public void setWeekDayList(SearchTimeWeekDayList weekDayList) {
+		this.weekDayList = weekDayList;
 	}
 }

@@ -8,7 +8,42 @@ googleAPIKey: AIzaSyCjKW72WoqcaeUiTwRzknUHu2uzz27KDAA
 
 publicTransport:
   bolognaUrban:
-     agencyId: TPERBO
+     agencyId: TPERBO_URBAN
      type: bus
-     tripTxt: trips_bl.txt
-     stopTxt: stops_bl.txt
+     tripTxt: trips_urban_bo.txt
+     stopTxt: stops_urban_bo.txt
+  bolognaExtraUrban:
+     agencyId: TPERBO_EXTRA
+     type: bus
+     tripTxt: trips_extra_bo.txt
+     stopTxt: stops_extra_bo.txt
+  bolognaSubUrban:
+     agencyId: TPERBO_SUB
+     type: bus
+     tripTxt: trips_sub_bo.txt
+     stopTxt: stops_sub_bo.txt
+  ferraraUrban:
+     agencyId: TPERFE_URBAN
+     type: bus
+     tripTxt: trips_urban_fe.txt
+     stopTxt: stops_urban_fe.txt
+  ferraraExtraUrban:
+     agencyId: TPERFE_EXTRA
+     type: bus
+     tripTxt: trips_extra_fe.txt
+     stopTxt: stops_extra_fe.txt
+  imolaUrban:
+     agencyId: TPERIMO_URBAN
+     type: bus
+     tripTxt: trips_urban_imola.txt
+     stopTxt: stops_urban_imola.txt
+  bLQ:
+     agencyId: TPER_BLQ
+     type: bus
+     tripTxt: trips_blq.txt
+     stopTxt: stops_blq.txt
+  bolognaTrain:
+     agencyId: TPERBO_TRAIN
+     type: train
+     tripTxt: trips_train.txt
+     stopTxt: stops_train.txt

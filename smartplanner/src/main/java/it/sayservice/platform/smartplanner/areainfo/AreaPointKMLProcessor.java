@@ -79,7 +79,7 @@ public class AreaPointKMLProcessor implements AreaPointProcessor {
 					double[] position = new double[] { c.getLatitude(), c.getLongitude() };
 					positions.add(position);
 				}
-				point.setPosition(extractLocation(positions));
+				point.setLocation(extractLocation(positions));
 				res.add(point);
 			}
 		}

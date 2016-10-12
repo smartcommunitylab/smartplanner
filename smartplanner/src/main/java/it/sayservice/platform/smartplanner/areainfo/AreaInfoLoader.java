@@ -20,6 +20,7 @@ package it.sayservice.platform.smartplanner.areainfo;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -65,25 +66,57 @@ public class AreaInfoLoader {
 				+ System.getProperty("file.separator") + agency.getDatafilePath());
 		File costFile = new File(System.getenv("OTP_HOME") + System.getProperty("file.separator") + router
 				+ System.getProperty("file.separator") + agency.getCostfilePath());
-		Map<String, Map<String, Object>> data = dataProcessor.read(new FileInputStream(dataFile));
+		List<AreaData> areaDataList = dataProcessor.readList(new FileInputStream(dataFile));
 
-		Map<String, CostData> costs = null;
+		Map<String, AreaData> areaDataMap = getAreaDataMapFromAreaDataList(areaDataList);
+
+		List<FaresZone> faresZonesList = null;
+
 		if (costFile.exists()) {
-			costs = costProcessor.read(new FileInputStream(costFile));
+			faresZonesList = costProcessor.readList(new FileInputStream(costFile));
 		}
+
+		Map<String, FaresZone> faresZoneMap = getFaresZoneMapFromFaresZonesList(faresZonesList);
 
 		List<AreaPoint> points = pointProcessor.read(new FileInputStream(pointsFile));
 		for (AreaPoint point : points) {
 			point.setId(agency.getRegion() + Constants.AREA_SEPARATOR_KEY + point.getId());
 			point.setRegionId(agency.getRegion());
-			point.setData(data.get(point.getAreaId()));
-			if (costs != null && costs.containsKey(point.getCostZoneId())) {
-				point.setCostData(costs.get(point.getCostZoneId()));
+			point.setData(areaDataMap.get(point.getAreaId()));
+			if (faresZoneMap != null && faresZoneMap.containsKey(point.getCostZoneId())) {
+				FaresZonePeriod[] fareZonePeriod = faresZoneMap.get(point.getCostZoneId()).getFaresZonePeriods();
+				point.setFaresZonePeriod(fareZonePeriod);
 			}
 			if (repository.findOne(point.getId()) == null) {
-				repository.save(point);
+				try {
+					repository.save(point);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
 			}
 		}
+	}
+
+	private Map<String, FaresZone> getFaresZoneMapFromFaresZonesList(List<FaresZone> faresZonesList) {
+		Map<String, FaresZone> faresZoneMap = new HashMap<String, FaresZone>();
+
+		for (int i = 0; i < faresZonesList.size(); i++) {
+			FaresZone faresZone = faresZonesList.get(i);
+			faresZoneMap.put(faresZone.getCostZoneId(), faresZone);
+		}
+
+		return faresZoneMap;
+	}
+
+	private Map<String, AreaData> getAreaDataMapFromAreaDataList(List<AreaData> areaDataList) {
+		Map<String, AreaData> areaDataMap = new HashMap<String, AreaData>();
+
+		for (int i = 0; i < areaDataList.size(); i++) {
+			AreaData areaData = areaDataList.get(i);
+			areaDataMap.put(areaData.getCostZoneId(), areaData);
+		}
+
+		return areaDataMap;
 	}
 
 	public void loadData(RouterConfig routerConfig, String regionId) throws Exception {

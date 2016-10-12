@@ -18,6 +18,7 @@
 package it.sayservice.platform.smartplanner.controllers;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -32,8 +33,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import it.sayservice.platform.smartplanner.areainfo.AreaData;
 import it.sayservice.platform.smartplanner.areainfo.AreaInfoLoader;
 import it.sayservice.platform.smartplanner.areainfo.CostData;
+import it.sayservice.platform.smartplanner.areainfo.CostDataZone;
+import it.sayservice.platform.smartplanner.areainfo.FaresZone;
+import it.sayservice.platform.smartplanner.areainfo.FaresZonePeriod;
+import it.sayservice.platform.smartplanner.areainfo.SearchTime;
 import it.sayservice.platform.smartplanner.configurations.ConfigurationManager;
 import it.sayservice.platform.smartplanner.configurations.MongoRouterMapper;
 import it.sayservice.platform.smartplanner.exception.SmartPlannerException;
@@ -111,24 +117,59 @@ public class AreaCtrl {
 
 		if (areaPointRepository != null) {
 			areaPointRepository.deleteByRegionId(region);
-			loadPoints(region, ap, null, null, router);
+			loadPoints(region, ap, null, null, router, null);
 		}
 	}
 
+	//fare oggetto areadata con il solo campo searchtime
 	@RequestMapping(method = RequestMethod.POST, value = "/{router}/rest/data/areadata/{region}")
 	public @ResponseBody void updateAreaData(@PathVariable String region, @PathVariable String router,
-			@RequestBody Map<String, Map<String, Object>> data) {
-		loadPoints(region, null, data, null, router);
+			@RequestBody List<AreaData> areaDataZoneList) {
+		Map<String, AreaData> areaDataMap = getDataMapByCostZoneList(areaDataZoneList);
+		loadPoints(region, null, areaDataMap, null, router, null);
+	}
+
+	private Map<String, AreaData> getDataMapByCostZoneList(List<AreaData> areaDataZoneList) {
+		Map<String, AreaData> areaDataMap = new HashMap<String, AreaData>();
+		for (int i = 0; i < areaDataZoneList.size(); i++) {
+			AreaData areaDataNotMapped = areaDataZoneList.get(i);
+			AreaData areaDataMapped = areaDataMap.get(areaDataNotMapped.getCostZoneId());
+
+			if (areaDataMapped==null){
+				areaDataMap.put(areaDataNotMapped.getCostZoneId(), areaDataNotMapped);
+			}
+
+		}
+
+		return areaDataMap;
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "/{router}/rest/data/areacosts/{region}")
 	public @ResponseBody void updateAreaCosts(@PathVariable String region, @PathVariable String router,
-			@RequestBody Map<String, CostData> costs) {
-		loadPoints(region, null, null, costs, router);
+			@RequestBody List<FaresZone> faresZoneList) {
+		Map<String, FaresZonePeriod[]> faresZoneMap = getFaresZoneMapByFaresZoneList(faresZoneList);
+		loadPoints(region, null, null, faresZoneMap, router, null);
 	}
 
-	public void loadPoints(String region, List<AreaPoint> points, Map<String, Map<String, Object>> data,
-			Map<String, CostData> costs, String router) {
+	private Map<String, FaresZonePeriod[]> getFaresZoneMapByFaresZoneList(List<FaresZone> faresZoneList) {
+		Map<String, FaresZonePeriod[]> faresZoneMap = new HashMap<String, FaresZonePeriod[]>();
+		for (int i = 0; i < faresZoneList.size(); i++) {
+			FaresZone faresZone = faresZoneList.get(i);
+			FaresZonePeriod[] faresZonePeriodList = faresZoneMap.get(faresZone.getCostZoneId());
+
+			if (faresZonePeriodList==null){
+				faresZonePeriodList = faresZone.getFaresZonePeriods();
+				faresZoneMap.put(faresZone.getCostZoneId(), faresZonePeriodList);
+			}
+
+		}
+
+		return faresZoneMap;
+	}
+
+
+	public void loadPoints(String region, List<AreaPoint> points, Map<String, AreaData> areaDataMap,
+		Map<String, FaresZonePeriod[]> faresZoneMap, String router, SearchTime searchTimeData) {
 
 		List<AreaPoint> newPoints;
 
@@ -147,11 +188,11 @@ public class AreaCtrl {
 					point.setId(region + Constants.AREA_SEPARATOR_KEY + point.getId());
 					point.setRegionId(region);
 				}
-				if (data != null) {
-					point.setData(data.get(point.getAreaId()));
+				if (areaDataMap != null) {
+					point.setData(areaDataMap.get(point.getAreaId()));
 				}
-				if (costs != null && costs.containsKey(point.getCostZoneId())) {
-					point.setCostData(costs.get(point.getCostZoneId()));
+				if (faresZoneMap != null && faresZoneMap.containsKey(point.getCostZoneId())) {
+					point.setFaresZonePeriod(faresZoneMap.get(point.getCostZoneId()));
 				}
 				areaPointRepository.save(point);
 			}

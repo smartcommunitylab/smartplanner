@@ -162,8 +162,23 @@ public class OTPHandler {
 				id.setAgency(agencyId);
 				id.setId(routeId);
 				route.setId(id);
-				route.setRouteLongName(tmpMap.get("longName").toString());
-				route.setRouteShortName(tmpMap.get("shortName").toString());
+
+				String longName = "";
+				if(tmpMap.get("longName")!=null){
+					longName = tmpMap.get("longName").toString();
+				}else{
+					System.err.println("longName null:"+tmpMap);
+				}
+
+				String shortName = "";
+				if(tmpMap.get("shortName")!=null){
+					shortName = tmpMap.get("shortName").toString();
+				}else{
+					System.err.println("longName null:"+tmpMap);
+				}
+
+				route.setRouteLongName(longName);
+				route.setRouteShortName(shortName);
 
 				result.add(route);
 			}

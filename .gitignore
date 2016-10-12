@@ -8,3 +8,8 @@ smartplanner-beans/.classpath
 smartplanner-beans/.project
 smartplanner-beans/.settings
 smartplanner-beans/src/test
+smartplanner-adapter/target/*
+smartplanner-adapter/.classpath
+smartplanner-adapter/.project
+smartplanner-adapter/.settings
+smartplanner-adapter/src/test

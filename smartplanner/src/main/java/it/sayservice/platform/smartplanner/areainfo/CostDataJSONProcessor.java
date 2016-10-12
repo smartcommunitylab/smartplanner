@@ -18,12 +18,24 @@
 package it.sayservice.platform.smartplanner.areainfo;
 
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-import org.codehaus.jackson.map.ObjectMapper;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class CostDataJSONProcessor implements CostDataProcessor {
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<FaresZone> readList(InputStream is) throws Exception {
+		ObjectMapper om = new ObjectMapper();
+		List<FaresZone> result = om.readValue(is, new TypeReference<List<FaresZone>>(){});
+
+		return result;
+	}
 
 	@SuppressWarnings("unchecked")
 	@Override

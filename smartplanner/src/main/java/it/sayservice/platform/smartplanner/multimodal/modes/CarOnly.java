@@ -18,8 +18,9 @@
 package it.sayservice.platform.smartplanner.multimodal.modes;
 
 import it.sayservice.platform.smartplanner.areainfo.CostData;
+import it.sayservice.platform.smartplanner.areainfo.FaresZonePeriod;
 import it.sayservice.platform.smartplanner.areainfo.SearchTime;
-import it.sayservice.platform.smartplanner.areainfo.SearchTime.SearchTimeSlot;
+import it.sayservice.platform.smartplanner.areainfo.TimeAndRangeSlot;
 import it.sayservice.platform.smartplanner.configurations.MongoRouterMapper;
 import it.sayservice.platform.smartplanner.data.message.Itinerary;
 import it.sayservice.platform.smartplanner.data.message.Leg;
@@ -389,21 +390,22 @@ public class CarOnly {
 				// insert additional area info: if this is a car and it does not
 				// arrive to a parking
 				if (leg.getTransport().getType().equals(TType.CAR) && leg.getTo().getStopId() == null) {
-					Point p = new Point(Double.parseDouble(leg.getTo().getLat()),
-							Double.parseDouble(leg.getTo().getLon()));
+					Point p = new Point(Double.parseDouble(leg.getTo().getLat()), Double.parseDouble(leg.getTo().getLon()));
 					Distance d = new Distance(0.35, Metrics.KILOMETERS);
 					// System.out.println("Can add extra near " + p + " / " +
 					// d);
 					List<AreaPoint> points = areaPointRepository.findByLocationNear(p, d);
 					if (points != null && !points.isEmpty()) {
 						Map<String, Object> extra = new HashMap<String, Object>();
-						SearchTime st = mapper.convertValue((Map) points.get(0).getData().get("searchTime"),
-								SearchTime.class);
-						SearchTimeSlot slot = null;
+						SearchTime st = mapper.convertValue((Map) points.get(0).getData().getSearchTimeData(), SearchTime.class);
+						TimeAndRangeSlot slot = null;
 						if (st != null && (slot = st.compute(leg.getEndtime())) != null) {
 							extra.put("searchTime", slot);
 						}
-						CostData cd = points.get(0).getCostData();
+
+						FaresZonePeriod[] fareZonePeriod = points.get(0).getFaresZonePeriod();
+						CostData cd = fareZonePeriod[0].getCostData();
+
 						if (cd != null) {
 							extra.put("costData", cd);
 						}

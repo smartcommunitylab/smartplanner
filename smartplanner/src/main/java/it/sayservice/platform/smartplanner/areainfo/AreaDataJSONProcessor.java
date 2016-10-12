@@ -18,15 +18,25 @@
 package it.sayservice.platform.smartplanner.areainfo;
 
 import java.io.InputStream;
+import java.util.List;
 import java.util.Map;
 
 import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.type.TypeReference;
 
 public class AreaDataJSONProcessor implements AreaDataProcessor {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public Map<String, Map<String, Object>> read(InputStream is) throws Exception {
+	public List<AreaData> readList(InputStream is) throws Exception {
+		ObjectMapper om = new ObjectMapper();
+		List<AreaData> areaDataList = om.readValue(is, new TypeReference<List<AreaData>>(){});
+		return areaDataList;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public Map<String, AreaData> read(InputStream is) throws Exception {
 		ObjectMapper om = new ObjectMapper();
 		return om.readValue(is, Map.class);
 	}

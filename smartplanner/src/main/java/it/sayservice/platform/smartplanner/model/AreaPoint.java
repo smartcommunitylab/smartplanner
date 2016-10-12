@@ -17,12 +17,11 @@
 
 package it.sayservice.platform.smartplanner.model;
 
-import java.util.Map;
+import it.sayservice.platform.smartplanner.areainfo.AreaData;
+import it.sayservice.platform.smartplanner.areainfo.FaresZonePeriod;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.GeoSpatialIndexed;
-
-import it.sayservice.platform.smartplanner.areainfo.CostData;
 
 public class AreaPoint {
 
@@ -34,9 +33,8 @@ public class AreaPoint {
 	private double[] location;
 	private String costZoneId;
 
-	private Map<String, Object> data;
-
-	private CostData costData;
+	private AreaData data;
+	private FaresZonePeriod[] faresZonePeriod;
 
 	public String getId() {
 		return id;
@@ -62,19 +60,19 @@ public class AreaPoint {
 		this.areaId = areaId;
 	}
 
-	public double[] getPosition() {
+	public double[] getLocation() {
 		return location;
 	}
 
-	public void setPosition(double[] position) {
-		this.location = position;
+	public void setLocation(double[] location) {
+		this.location = location;
 	}
 
-	public Map<String, Object> getData() {
+	public AreaData getData() {
 		return data;
 	}
 
-	public void setData(Map<String, Object> data) {
+	public void setData(AreaData data) {
 		this.data = data;
 	}
 
@@ -86,11 +84,11 @@ public class AreaPoint {
 		this.costZoneId = costZoneId;
 	}
 
-	public CostData getCostData() {
-		return costData;
+	public FaresZonePeriod[] getFaresZonePeriod() {
+		return faresZonePeriod;
 	}
 
-	public void setCostData(CostData costData) {
-		this.costData = costData;
+	public void setFaresZonePeriod(FaresZonePeriod[] faresZonePeriods) {
+		this.faresZonePeriod = faresZonePeriods;
 	}
 }

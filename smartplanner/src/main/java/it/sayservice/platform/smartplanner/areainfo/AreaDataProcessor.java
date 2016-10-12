@@ -18,8 +18,10 @@
 package it.sayservice.platform.smartplanner.areainfo;
 
 import java.io.InputStream;
+import java.util.List;
 import java.util.Map;
 
 public interface AreaDataProcessor {
-	public Map<String, Map<String, Object>> read(InputStream is) throws Exception;
+	public Map<String, AreaData> read(InputStream is) throws Exception;
+	public List<AreaData> readList(InputStream is) throws Exception;
 }

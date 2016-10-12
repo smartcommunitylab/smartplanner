@@ -18,8 +18,11 @@
 package it.sayservice.platform.smartplanner.areainfo;
 
 import java.io.InputStream;
+import java.util.List;
 import java.util.Map;
 
 public interface CostDataProcessor {
 	public Map<String, CostData> read(InputStream is) throws Exception;
+
+	public List<FaresZone> readList(InputStream is) throws Exception;
 }
