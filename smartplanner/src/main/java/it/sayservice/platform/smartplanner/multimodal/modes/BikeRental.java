@@ -133,7 +133,7 @@ public class BikeRental {
 		String time = null;
 		String arriveBy = "false";
 		String optimize = Constants.OPTIMIZATION.QUICK.name();
-		String numItineraries = "3";
+		String numItineraries = "1";
 		String maxWalkDistance = Constants.LONG_WALK;
 		double sX = 0;
 		double sY = 0;
