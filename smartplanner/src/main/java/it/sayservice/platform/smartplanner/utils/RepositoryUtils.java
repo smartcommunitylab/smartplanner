@@ -17,30 +17,6 @@
 
 package it.sayservice.platform.smartplanner.utils;
 
-import java.io.File;
-import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.List;
-import java.util.Locale;
-import java.util.Map;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.geo.Distance;
-import org.springframework.data.geo.Metrics;
-import org.springframework.data.geo.Point;
-import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Component;
-
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import it.sayservice.platform.smartplanner.areainfo.AreaInfoLoader;
 import it.sayservice.platform.smartplanner.configurations.ConfigurationManager;
 import it.sayservice.platform.smartplanner.configurations.MongoRouterMapper;
@@ -64,6 +40,30 @@ import it.sayservice.platform.smartplanner.mongo.repos.AreaPointRepository;
 import it.sayservice.platform.smartplanner.mongo.repos.BikeStationRepository;
 import it.sayservice.platform.smartplanner.mongo.repos.CarStationRepository;
 import it.sayservice.platform.smartplanner.mongo.repos.TaxiStationRepository;
+
+import java.io.File;
+import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.geo.Distance;
+import org.springframework.data.geo.Metrics;
+import org.springframework.data.geo.Point;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.http.HttpStatus;
+import org.springframework.stereotype.Component;
+
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Component
 public class RepositoryUtils {
@@ -304,8 +304,10 @@ public class RepositoryUtils {
 				trips = template.find(new Query(Criteria.where("tripId").is(expr).and("routeId").in(routes)), Map.class,
 						"trips");
 			} else {
-				expr = "^[\\D]*" + tripId.replaceAll("\\D*", "") + "\\$";
-				//				expr = "^[\\D]?" + tripId.replaceAll("[\\\\w]*", "").replace("$", "\\$") + "$";
+//				expr = "^[\\D]*" + tripId.replaceAll("\\D*", "") + "\\$";
+//				expr = "^[\\D]?" + tripId.replaceAll("[\\\\w]*", "").replace("$", "\\$") + "$";				
+				expr = "^[\\D]*" + tripId.replaceAll("\\D*", "") + "\\$?[\\d]*$";
+
 				trips = template.find(new Query(Criteria.where("tripId").regex(expr).and("routeId").in(routes)),
 						Map.class, "trips");
 				//				template.findAll(Map.class,"trips");
