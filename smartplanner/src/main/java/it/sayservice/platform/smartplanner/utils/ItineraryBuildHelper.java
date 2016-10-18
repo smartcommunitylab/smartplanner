@@ -17,7 +17,6 @@
 
 package it.sayservice.platform.smartplanner.utils;
 
-import it.sayservice.platform.smartplanner.areainfo.CostData;
 import it.sayservice.platform.smartplanner.configurations.ConfigurationManager;
 import it.sayservice.platform.smartplanner.configurations.RouterConfig;
 import it.sayservice.platform.smartplanner.data.message.Geometery;
@@ -37,6 +36,7 @@ import it.sayservice.platform.smartplanner.data.message.alerts.AlertType;
 import it.sayservice.platform.smartplanner.data.message.alerts.CreatorType;
 import it.sayservice.platform.smartplanner.model.BikeStation;
 import it.sayservice.platform.smartplanner.model.CarStation;
+import it.sayservice.platform.smartplanner.model.CostData;
 import it.sayservice.platform.smartplanner.model.DynamicBikeStation;
 import it.sayservice.platform.smartplanner.model.DynamicCarStation;
 import it.sayservice.platform.smartplanner.otp.SmartPlannerUtils;

@@ -17,8 +17,6 @@
 
 package it.sayservice.platform.smartplanner.multimodal.modes;
 
-import it.sayservice.platform.smartplanner.areainfo.CostData;
-import it.sayservice.platform.smartplanner.areainfo.FaresZonePeriod;
 import it.sayservice.platform.smartplanner.areainfo.SearchTime;
 import it.sayservice.platform.smartplanner.areainfo.TimeAndRangeSlot;
 import it.sayservice.platform.smartplanner.configurations.MongoRouterMapper;
@@ -29,6 +27,8 @@ import it.sayservice.platform.smartplanner.data.message.RType;
 import it.sayservice.platform.smartplanner.data.message.TType;
 import it.sayservice.platform.smartplanner.geocoder.GeocodeAPIsManager;
 import it.sayservice.platform.smartplanner.model.AreaPoint;
+import it.sayservice.platform.smartplanner.model.CostData;
+import it.sayservice.platform.smartplanner.model.FaresZonePeriod;
 import it.sayservice.platform.smartplanner.model.StreetLocation;
 import it.sayservice.platform.smartplanner.mongo.repos.AreaPointRepository;
 import it.sayservice.platform.smartplanner.utils.Constants;

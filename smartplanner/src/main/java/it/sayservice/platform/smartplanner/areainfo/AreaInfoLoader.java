@@ -26,6 +26,8 @@ import java.util.Map;
 
 import it.sayservice.platform.smartplanner.configurations.RouterConfig;
 import it.sayservice.platform.smartplanner.model.AreaPoint;
+import it.sayservice.platform.smartplanner.model.FaresZone;
+import it.sayservice.platform.smartplanner.model.FaresZonePeriod;
 import it.sayservice.platform.smartplanner.mongo.repos.AreaPointRepository;
 import it.sayservice.platform.smartplanner.utils.Agency;
 import it.sayservice.platform.smartplanner.utils.Constants;

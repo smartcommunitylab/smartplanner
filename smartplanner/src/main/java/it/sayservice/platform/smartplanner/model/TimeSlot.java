@@ -1,4 +1,6 @@
-package it.sayservice.platform.smartplanner.areainfo;
+package it.sayservice.platform.smartplanner.model;
+
+import it.sayservice.platform.smartplanner.areainfo.TimeSlotException;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;

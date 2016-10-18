@@ -17,6 +17,9 @@
 
 package it.sayservice.platform.smartplanner.areainfo;
 
+import it.sayservice.platform.smartplanner.model.CostData;
+import it.sayservice.platform.smartplanner.model.FaresZone;
+
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;

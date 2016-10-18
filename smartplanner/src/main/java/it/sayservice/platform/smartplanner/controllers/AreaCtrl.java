@@ -35,15 +35,15 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import it.sayservice.platform.smartplanner.areainfo.AreaData;
 import it.sayservice.platform.smartplanner.areainfo.AreaInfoLoader;
-import it.sayservice.platform.smartplanner.areainfo.CostData;
 import it.sayservice.platform.smartplanner.areainfo.CostDataZone;
-import it.sayservice.platform.smartplanner.areainfo.FaresZone;
-import it.sayservice.platform.smartplanner.areainfo.FaresZonePeriod;
 import it.sayservice.platform.smartplanner.areainfo.SearchTime;
 import it.sayservice.platform.smartplanner.configurations.ConfigurationManager;
 import it.sayservice.platform.smartplanner.configurations.MongoRouterMapper;
 import it.sayservice.platform.smartplanner.exception.SmartPlannerException;
 import it.sayservice.platform.smartplanner.model.AreaPoint;
+import it.sayservice.platform.smartplanner.model.CostData;
+import it.sayservice.platform.smartplanner.model.FaresZone;
+import it.sayservice.platform.smartplanner.model.FaresZonePeriod;
 import it.sayservice.platform.smartplanner.model.Response;
 import it.sayservice.platform.smartplanner.mongo.repos.AreaPointRepository;
 import it.sayservice.platform.smartplanner.utils.Constants;
@@ -188,12 +188,13 @@ public class AreaCtrl {
 					point.setId(region + Constants.AREA_SEPARATOR_KEY + point.getId());
 					point.setRegionId(region);
 				}
-				if (areaDataMap != null) {
+				if (areaDataMap != null && areaDataMap.containsKey(point.getAreaId())) {
 					point.setData(areaDataMap.get(point.getAreaId()));
 				}
 				if (faresZoneMap != null && faresZoneMap.containsKey(point.getCostZoneId())) {
 					point.setFaresZonePeriod(faresZoneMap.get(point.getCostZoneId()));
 				}
+
 				areaPointRepository.save(point);
 			}
 		}

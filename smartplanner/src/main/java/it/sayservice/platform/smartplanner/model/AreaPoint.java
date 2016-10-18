@@ -18,7 +18,6 @@
 package it.sayservice.platform.smartplanner.model;
 
 import it.sayservice.platform.smartplanner.areainfo.AreaData;
-import it.sayservice.platform.smartplanner.areainfo.FaresZonePeriod;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.GeoSpatialIndexed;

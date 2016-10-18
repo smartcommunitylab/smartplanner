@@ -15,17 +15,31 @@
  *
  */
 
-package it.sayservice.platform.smartplanner.areainfo;
+package it.sayservice.platform.smartplanner.model;
 
-import it.sayservice.platform.smartplanner.model.CostData;
-import it.sayservice.platform.smartplanner.model.FaresZone;
+public class CostData {
 
-import java.io.InputStream;
-import java.util.List;
-import java.util.Map;
+	private String fixedCost;
+	private String costDefinition;
 
-public interface CostDataProcessor {
-	public Map<String, CostData> read(InputStream is) throws Exception;
+	public String getFixedCost() {
+		return fixedCost;
+	}
 
-	public List<FaresZone> readList(InputStream is) throws Exception;
+	public void setFixedCost(String fixedCost) {
+		this.fixedCost = fixedCost;
+	}
+
+	public String getCostDefinition() {
+		return costDefinition;
+	}
+
+	public void setCostDefinition(String costDefinition) {
+		this.costDefinition = costDefinition;
+	}
+
+	@Override
+	public String toString() {
+		return fixedCost + "," + costDefinition;
+	}
 }

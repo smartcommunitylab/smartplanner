@@ -1,4 +1,4 @@
-package it.sayservice.platform.smartplanner.areainfo;
+package it.sayservice.platform.smartplanner.model;
 
 public enum WeekDay {
 

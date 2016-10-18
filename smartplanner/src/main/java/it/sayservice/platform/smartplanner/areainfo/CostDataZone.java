@@ -1,5 +1,7 @@
 package it.sayservice.platform.smartplanner.areainfo;
 
+import it.sayservice.platform.smartplanner.model.CostData;
+
 public class CostDataZone {
 
 	CostData costData;
