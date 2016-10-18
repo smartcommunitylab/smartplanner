@@ -1,0 +1,5 @@
+{
+	"metroparco_bike" : {"source_bean":"sc.app.smartadapter.beans.MetroParcoBikePoint",
+						 "target_bean":"it.sayservice.platform.smartplanner.data.message.otpbeans.BikeStation"}
+	
+}

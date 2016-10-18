@@ -6,7 +6,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import sc.app.smartadapter.beans.MetroParcoBikePoint;
 import sc.app.smartadapter.beans.MetroParcoStreet;
 
 import com.fasterxml.jackson.core.JsonParseException;
@@ -14,13 +13,13 @@ import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.type.TypeFactory;
 
-public class MetroParcoClient<T> {
+public class MetroParcoClient {
 
-	public List<T> getBeanFromRestFullServer(String server, Class clazz){
+	public static List<RemoteBean> getBeanFromRestFullServer(String server, Class clazz){
 
 		ObjectMapper mapper = new ObjectMapper();
 
-		List<T> beanList = null;
+		List<RemoteBean> beanList = null;
     TypeFactory t = TypeFactory.defaultInstance();
 
 		try {
@@ -39,16 +38,25 @@ public class MetroParcoClient<T> {
 	}
 
 
+
 	public static void main(String[] args) {
 
-		MetroParcoClient<MetroParcoStreet> mpBikeStation = new MetroParcoClient<MetroParcoStreet>();
+		Class beanClass = null;
+		try {
+			beanClass = Class.forName("sc.app.smartadapter.beans.MetroParcoStreet");
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
-		List<MetroParcoStreet> beanList = new ArrayList<MetroParcoStreet>();
+		MetroParcoClient mpBikeStation = new MetroParcoClient();
 
-		beanList = mpBikeStation.getBeanFromRestFullServer("https://tn.smartcommunitylab.it/metroparco/rest/nosec/tn/street", MetroParcoStreet.class);
+		List<RemoteBean> beanList = new ArrayList<RemoteBean>();
+
+		beanList = mpBikeStation.getBeanFromRestFullServer("https://tn.smartcommunitylab.it/metroparco/rest/nosec/tn/street", beanClass);
 
 		for (int i = 0; i < beanList.size(); i++) {
-			MetroParcoStreet bean = beanList.get(i);
+			MetroParcoStreet bean = (MetroParcoStreet) beanList.get(i);
 			System.out.println("bs["+i+"]: "+bean.getId());
 		}
 	}

@@ -12,14 +12,28 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	<smartplanner-beans.version>1.1.12</smartplanner-beans.version>
+	<smartplanner.version>1.1.1</smartplanner.version>
   </properties>
 
   <dependencies>
 
 	<dependency>
+		<groupId>com.sun.jersey</groupId>
+		<artifactId>jersey-client</artifactId>
+		<version>1.8</version>
+	</dependency>
+
+	<dependency>
 		<groupId>com.fasterxml.jackson.core</groupId>
 		<artifactId>jackson-databind</artifactId>
 		<version>2.6.3</version>
+	</dependency>
+
+	<dependency>
+		<groupId>smartcampus</groupId>
+		<artifactId>sc.app.smartplanner</artifactId>
+		<version>${smartplanner.version}</version>
+		<type>jar</type>
 	</dependency>
 
 	<dependency>

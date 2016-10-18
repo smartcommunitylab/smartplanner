@@ -1,5 +1,8 @@
 package sc.app.smartadapter.beans;
 
+import sc.app.smartadapter.restful.client.RemoteBean;
+import sc.app.smartadapter.restful.client.SmartPlannerBean;
+
 
 /*
  *   {
@@ -21,7 +24,7 @@ package sc.app.smartadapter.beans;
     ]
   }
  * */
-public class MetroParcoBikePoint {
+public class MetroParcoBikePoint implements RemoteBean{
 
 	String id;
 	String id_app;
@@ -105,4 +108,41 @@ public class MetroParcoBikePoint {
 	public void setAgencyId(String[] agencyId) {
 		this.agencyId = agencyId;
 	}
+
+	@Override
+	public SmartPlannerBean adaptBean() {
+		EnhancedBikeStation bikeStation = new EnhancedBikeStation();
+
+		int bikeNumber = this.getBikeNumber();
+		bikeStation.setAvailableSharingVehicles(bikeNumber);
+
+		int slotNumber = this.getSlotNumber();
+		bikeStation.setPosts(slotNumber);
+
+		String name = this.getName();
+		if(name!=null){
+			bikeStation.setFullName(name);
+		}
+
+		double[] position = getPositionFromGeometry(this.getGeometry());
+		bikeStation.setPosition(position);
+
+		String id = this.getId();
+		bikeStation.setId(id);
+		
+		return bikeStation;
+	}
+	
+	private double[] getPositionFromGeometry(Geometry geometry) {
+		double lat;
+		double lng;
+
+		lat = Double.parseDouble(geometry.getLat());
+		lng = Double.parseDouble(geometry.getLng());
+
+		double[] position = {lat, lng};
+
+		return position;
+	}
+
 }

@@ -1,6 +1,9 @@
 package sc.app.smartadapter.beans;
 
-public class MetroParcoParkingStructure {
+import sc.app.smartadapter.restful.client.RemoteBean;
+import sc.app.smartadapter.restful.client.SmartPlannerBean;
+
+public class MetroParcoParkingStructure implements RemoteBean {
 
 	String id;
 	String id_app;
@@ -181,6 +184,12 @@ public class MetroParcoParkingStructure {
 
 	public void setAgencyId(String[] agencyId) {
 		this.agencyId = agencyId;
+	}
+
+	@Override
+	public SmartPlannerBean adaptBean() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
