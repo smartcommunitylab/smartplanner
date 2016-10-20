@@ -1,9 +1,21 @@
 package sc.app.smartdapter.configuration;
 
+import java.lang.reflect.Field;
+import java.util.Map;
+
 public class RemoteBeanConfiguration {
-	String id;
+	String remote_bean_id;
 	String remote_url;
 	String sp_url;
+	Map<String, String> input_filters;
+
+	public String getRemote_bean_id() {
+		return remote_bean_id;
+	}
+
+	public void setRemote_bean_id(String remote_bean_id) {
+		this.remote_bean_id = remote_bean_id;
+	}
 
 	public String getRemote_url() {
 		return remote_url;
@@ -21,17 +33,48 @@ public class RemoteBeanConfiguration {
 		this.sp_url = sp_url;
 	}
 
-	public String getId() {
-		return id;
+	public Map<String, String> getInput_filters() {
+		return input_filters;
 	}
 
-	public void setId(String id) {
-		this.id = id;
+	public void setInput_filters(Map<String, String> input_filters) {
+		this.input_filters = input_filters;
 	}
 
 	@Override
 	public String toString() {
-		return "RemoteBeanConfiguration [id=" + id + ", remote_url=" + remote_url + ", sp_url=" + sp_url + "]";
+		String filterMapString = "[";
+		for (String filterKey : input_filters.keySet()) {
+			filterMapString += "key=" + filterKey + ",value=" + input_filters.get(filterKey) + ";";
+		}
+		filterMapString += "]";
+
+		return "RemoteBeanConfiguration [remote_url=" + remote_url + ", sp_url=" + sp_url + ", inputFilter=" + filterMapString + "]";
 	}
 
+	public static void main(String[] args) {
+		RemoteBeanConfiguration rbc = new RemoteBeanConfiguration();
+		rbc.setRemote_url("rmturl");
+		Class<?> clazz = rbc.getClass();
+		Field field = null;
+		try {
+			field = clazz.getDeclaredField("remote_url");
+		} catch (NoSuchFieldException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (SecurityException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		try {
+			System.out.println(field.get(rbc));
+		} catch (IllegalArgumentException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 }

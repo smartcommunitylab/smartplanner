@@ -1,6 +1,7 @@
 package sc.app.smartadapter.restful.client;
 
-public interface RemoteBean {
+import sc.app.smartdapter.configuration.RemoteBeanConfiguration;
 
-	public SmartPlannerBean adaptBean ();
+public interface RemoteBean {
+	public SmartPlannerBean adaptBean (RemoteBeanConfiguration remoteBeanConfiguration);
 }

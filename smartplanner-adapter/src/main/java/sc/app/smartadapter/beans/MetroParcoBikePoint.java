@@ -1,7 +1,9 @@
 package sc.app.smartadapter.beans;
 
+import it.sayservice.platform.smartplanner.data.message.StopId;
 import sc.app.smartadapter.restful.client.RemoteBean;
 import sc.app.smartadapter.restful.client.SmartPlannerBean;
+import sc.app.smartdapter.configuration.RemoteBeanConfiguration;
 
 
 /*
@@ -110,7 +112,7 @@ public class MetroParcoBikePoint implements RemoteBean{
 	}
 
 	@Override
-	public SmartPlannerBean adaptBean() {
+	public SmartPlannerBean adaptBean(RemoteBeanConfiguration remoteBeanConfiguration) {
 		EnhancedBikeStation bikeStation = new EnhancedBikeStation();
 
 		int bikeNumber = this.getBikeNumber();
@@ -129,7 +131,17 @@ public class MetroParcoBikePoint implements RemoteBean{
 
 		String id = this.getId();
 		bikeStation.setId(id);
+
+		StopId stationId = new StopId();
+		stationId.setId(id);
+		String agencyId = remoteBeanConfiguration.getRemote_bean_id();
 		
+		stationId.setAgencyId(agencyId);
+
+		bikeStation.setStationId(stationId);
+		String type = "BIKE-RENTAL";
+		bikeStation.setType(type);
+
 		return bikeStation;
 	}
 	

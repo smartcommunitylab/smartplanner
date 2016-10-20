@@ -2,6 +2,7 @@ package sc.app.smartadapter.beans;
 
 import sc.app.smartadapter.restful.client.RemoteBean;
 import sc.app.smartadapter.restful.client.SmartPlannerBean;
+import sc.app.smartdapter.configuration.RemoteBeanConfiguration;
 
 public class MetroParcoStreet implements RemoteBean{
 
@@ -135,7 +136,7 @@ public class MetroParcoStreet implements RemoteBean{
 	}
 
 	@Override
-	public SmartPlannerBean adaptBean() {
+	public SmartPlannerBean adaptBean(RemoteBeanConfiguration remoteBeanConfiguration) {
 		// TODO Auto-generated method stub
 		return null;
 	}
