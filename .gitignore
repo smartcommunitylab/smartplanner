@@ -8,3 +8,5 @@ smartplanner-beans/.classpath
 smartplanner-beans/.project
 smartplanner-beans/.settings
 smartplanner-beans/src/test
+smartplanner/.metadata/*
+smartplanner/RemoteSystemsTempFiles/.project

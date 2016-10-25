@@ -94,6 +94,17 @@ public class OTPConnector {
 
 		try {
 
+			String optimizeString = "";
+			if (params.get(Constants.OTP_RQ_OPTIMIZE).equalsIgnoreCase(Constants.OPTIMIZATION.SAFE.toString())) {
+				optimizeString = Constants.OPTIMIZATION.TRIANGLE.toString() + "&" + Constants.OTP_RQ_T_SAFETY + "=1"
+						+ "&" + Constants.OTP_RQ_T_SLOPE + "=0" + "&" + Constants.OTP_RQ_T_TIME + "=0";
+				
+			} else {
+				optimizeString = Constants.OPTIMIZATION.QUICK.toString();
+			}
+
+			System.out.println("optimizeString:" + optimizeString);
+			
 			String urlParams = Constants.OTP_RQ_ITNS + "=" + params.get(Constants.OTP_RQ_ITNS) + "&"
 					+ Constants.OTP_RQ_FROM + "=" + params.get(Constants.OTP_RQ_FROM) + "&" + Constants.OTP_RQ_TO + "="
 					+ params.get(Constants.OTP_RQ_TO) + "&" + Constants.OTP_RQ_MODE + "="
@@ -104,14 +115,8 @@ public class OTPConnector {
 					+ params.get(Constants.OTP_RQ_ARRIVEBY) + "&" + Constants.BATCH + "=" + BATCH + "&"
 					+ Constants.WALK_SPEED + "=" + WALK_SPEED + "&" + Constants.BIKE_SPEED + "=" + BIKE_SPEED + "&"
 					+ Constants.MIN_TRANSFERTIME + "=" + MIN_TRANSERTIME + "&" + Constants.OTP_RQ_OPTIMIZE + "="
-					+ params.get(Constants.OTP_RQ_OPTIMIZE)
-					+ (Constants.OPTIMIZATION.TRIANGLE.toString().equals(params.get(Constants.OTP_RQ_OPTIMIZE))
-							? "&" + Constants.OTP_RQ_T_SAFETY + "=" + params.get(Constants.OTP_RQ_T_SAFETY) + "&"
-									+ Constants.OTP_RQ_T_SLOPE + "=" + params.get(Constants.OTP_RQ_T_SLOPE) + "&"
-									+ Constants.OTP_RQ_T_TIME + "=" + params.get(Constants.OTP_RQ_T_TIME)
-							: "")
-					+ "&" + Constants.WALK_RELUCTANCE + "="
-					+ (params.get(Constants.OTP_RQ_MODE).equals(TType.CAR.name()) ? 0:WALK_RELUCTANCE) + "&"
+					+ optimizeString + "&" + Constants.WALK_RELUCTANCE + "="
+					+ (params.get(Constants.OTP_RQ_MODE).equals(TType.CAR.name()) ? 0 : WALK_RELUCTANCE) + "&"
 					+ Constants.WHEELCHAIR + "=" + wheelChair;
 
 			URL url = new URL(otpEndPoint + router + Constants.API_PLAN + "?" + urlParams);
