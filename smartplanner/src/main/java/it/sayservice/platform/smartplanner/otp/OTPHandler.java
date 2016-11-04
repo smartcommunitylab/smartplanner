@@ -68,6 +68,7 @@ import it.sayservice.platform.smartplanner.otp.schedule.WeekdayFilter;
 import it.sayservice.platform.smartplanner.utils.Agency;
 import it.sayservice.platform.smartplanner.utils.Constants;
 import it.sayservice.platform.smartplanner.utils.HTTPConnector;
+import it.sayservice.platform.smartplanner.utils.UnZip;
 
 @Component
 @EnableConfigurationProperties(RouterConfig.class)
@@ -104,8 +105,24 @@ public class OTPHandler {
 			Agency agency = routerConfig.getPublicTransport().get(key);
 			agencyTripFile.put(agency.getAgencyId(), agency.getTripTxt());
 			agencyStopFile.put(agency.getAgencyId(), agency.getStopTxt());
-		}
+			
+			/** extract agency gtfs file to $OTP_HOME/cache/schedule folder. start **/
+			try {
+				UnZip.unZipIt(
+						System.getenv("OTP_HOME") + System.getProperty("file.separator") + routerConfig.getRouter()
+								+ System.getProperty("file.separator") + Constants.GTFS_FOLDER_PATH
+								+ System.getProperty("file.separator") + agency.getAgencyId() + ".zip",
+						System.getenv("OTP_HOME") + System.getProperty("file.separator") + routerConfig.getRouter()
+								+ System.getProperty("file.separator") + Constants.SCHEDULES_FOLDER_PATH
+								+ System.getProperty("file.separator") + agency.getAgencyId()
+								+ System.getProperty("file.separator"));
+			} catch (Exception e) {
+				System.err.println("gtfs not extracted for agency id: " + agency.getAgencyId());
+			}
+			/** extract agency gtfs file to $OTP_HOME/cache/schedule folder. end **/
 
+		}
+		
 		buildTrips(routerConfig.getRouter());
 
 	}
@@ -131,6 +148,20 @@ public class OTPHandler {
 			Agency agency = routerConfig.getPublicTransport().get(key);
 			agencyTripFile.put(agency.getAgencyId(), agency.getTripTxt());
 			agencyStopFile.put(agency.getAgencyId(), agency.getStopTxt());
+			/** extract agency gtfs file to $OTP_HOME/cache/schedule folder. start **/
+			try {
+				UnZip.unZipIt(
+						System.getenv("OTP_HOME") + System.getProperty("file.separator") + routerConfig.getRouter()
+								+ System.getProperty("file.separator") + Constants.GTFS_FOLDER_PATH
+								+ System.getProperty("file.separator") + agency.getAgencyId() + ".zip",
+						System.getenv("OTP_HOME") + System.getProperty("file.separator") + routerConfig.getRouter()
+								+ System.getProperty("file.separator") + Constants.SCHEDULES_FOLDER_PATH
+								+ System.getProperty("file.separator") + agency.getAgencyId()
+								+ System.getProperty("file.separator"));
+			} catch (Exception e) {
+				System.err.println("gtfs not extracted for agency id: " + agency.getAgencyId());
+			}
+			/** extract agency gtfs file to $OTP_HOME/cache/schedule folder. end **/
 		}
 
 		buildTrips(routerConfig.getRouter());
@@ -327,8 +358,8 @@ public class OTPHandler {
 
 		for (String agencyId : agencyStopFile.keySet()) {
 			List<String[]> lines = readCSV((System.getenv("OTP_HOME") + System.getProperty("file.separator") + router
-					+ Constants.STOPS_FOLDER_PATH + System.getProperty("file.separator")
-					+ agencyStopFile.get(agencyId)));
+					+ System.getProperty("file.separator") + Constants.SCHEDULES_FOLDER_PATH + System.getProperty("file.separator")
+					+ agencyId + System.getProperty("file.separator") + Constants.GTFS_STOP));
 
 			if (lines.get(0) != null) {
 
@@ -391,23 +422,30 @@ public class OTPHandler {
 		trips = new TreeMap<String, String>();
 		tripsCalendar = new TreeMap<String, String>();
 
-		for (String agId : agencyTripFile.keySet()) {
+		for (String agencyId : agencyTripFile.keySet()) {
 			List<String[]> lines = readCSV((System.getenv("OTP_HOME") + System.getProperty("file.separator") + router
-					+ Constants.TRIPS_FOLDER_PATH + System.getProperty("file.separator") + agencyTripFile.get(agId)));
+					+ Constants.SCHEDULES_FOLDER_PATH + System.getProperty("file.separator") + agencyId
+					+ System.getProperty("file.separator") + Constants.GTFS_TRIPS));
 
-			for (String[] words : lines) {
-				if (words.length != 6) {
-					System.err.println("Wrong Trips CVS length: " + words.length);
-				}
+			// route_id,service_id,trip_id,trip_headsign,direction_id,shape_id,wheelchair_accessible
+			int routeIdIndex = getFieldIndex(Constants.TRIP_ROUTE_ID, lines.get(0));
+			int tripIdIndex = getFieldIndex(Constants.TRIP_ID, lines.get(0));
+			int tripServiceIdIndex = getFieldIndex(Constants.TRIP_SERVICE_ID, lines.get(0));
+//			int tripWheelChairIndex = getFieldIndex(Constants.TRIP_WHEELCHAIR_ACCESSIBLE, lines.get(0));
+		
+			for (int i = 1; i < lines.size(); i++) {
+
+				String[] words = lines.get(i);
+			
 				try {
-					String id = words[2];
-					String calendar = words[1];
-					String route = words[0];
-					String newId = agId + "_" + id;
+					String id = words[tripIdIndex]; //2
+					String calendar = words[tripServiceIdIndex]; // 1
+					String route = words[routeIdIndex]; //0
+					String newId = agencyId + "_" + id;
 					trips.put(newId, route);
 					tripsCalendar.put(newId, calendar);
 				} catch (Exception e) {
-					System.out.println("Error parsing trip: " + words[0]);
+					System.out.println("Error parsing trip: " + words[routeIdIndex]);
 				}
 			}
 
@@ -713,11 +751,19 @@ public class OTPHandler {
 				+ System.getProperty("file.separator") + agencyId + System.getProperty("file.separator")
 				+ Constants.GTFS_CALENDAR_DATE);
 
-		for (String[] words : lines) {
+		// service_id,date,exception_type
+		int serviceIdIndex = getFieldIndex(Constants.CDATES_SERVICE_ID, lines.get(0));
+		int dateIndex = getFieldIndex(Constants.CDATES_DATE, lines.get(0));
+		int exceptionTypeIndex = getFieldIndex(Constants.CDATES_EXCEPTION_TYPE, lines.get(0));
+		
+		for (int i = 1; i < lines.size(); i++) {
+			
+			String[] words = lines.get(i);
+						
 			try {
-				String name = agencyId + "_" + words[0]; // new
-				String date = words[1];
-				String type = words[2];
+				String name = agencyId + "_" + words[serviceIdIndex]; // new
+				String date = words[dateIndex];
+				String type = words[exceptionTypeIndex];
 				WeekdayException wde;
 				if (entries.containsKey(name)) {
 					wde = entries.get(name);
@@ -764,13 +810,20 @@ public class OTPHandler {
 
 			Map<String, String> serviceStartDate = new HashMap<String, String>();
 			Map<String, String> serviceEndDate = new HashMap<String, String>();
-
+			
+			// service_id,date,exception_type
+			int serviceIdIndex = getFieldIndex(Constants.CDATES_SERVICE_ID, linesEx.get(0));
+			int dateIndex = getFieldIndex(Constants.CDATES_DATE, linesEx.get(0));
+//			int exceptionTypeIndex = getFieldIndex(Constants.CDATES_EXCEPTION_TYPE, lines.get(0));
 			boolean b[] = new boolean[7];
 
-			for (String[] words : linesEx) {
+			for (int i = 1; i < linesEx.size(); i++) {
+
+				String[] words = linesEx.get(i);
+
 				try {
-					String name = agencyId + "_" + words[0]; // new
-					String date = words[1];
+					String name = agencyId + "_" + words[serviceIdIndex]; // new
+					String date = words[dateIndex];
 
 					if (!serviceStartDate.containsKey(name)) {
 						serviceStartDate.put(name, date);
@@ -805,29 +858,44 @@ public class OTPHandler {
 		}
 
 		if (lines != null) {
-			for (String[] words : lines) {
+			
+			// service_id,date,exception_type
+			int serviceIdIndex = getFieldIndex(Constants.CAL_SERVICE_ID, lines.get(0));
+//			int monIndex = getFieldIndex(Constants.CAL_MON, lines.get(0));
+//			int tueIndex = getFieldIndex(Constants.CAL_TUE, lines.get(0));
+//			int wedIndex = getFieldIndex(Constants.CAL_WED, lines.get(0));
+//			int thrIndex = getFieldIndex(Constants.CAL_THR, lines.get(0));
+//			int friIndex = getFieldIndex(Constants.CAL_FRI, lines.get(0));
+//			int satIndex = getFieldIndex(Constants.CAL_SAT, lines.get(0));
+//			int sunIndex = getFieldIndex(Constants.CAL_SUN, lines.get(0));
+			int startDateIndex = getFieldIndex(Constants.CAL_START_DATE, lines.get(0));
+			int endDateIndex = getFieldIndex(Constants.CAL_END_DATE, lines.get(0));
+			
+			for (int i = 1; i < lines.size(); i++) {
+
+				String[] words = lines.get(i);
+			
 				try {
-					String name = agencyId + "_" + words[0]; // new
+					String name = agencyId + "_" + words[serviceIdIndex]; // new
 					boolean b[] = new boolean[7];
-					for (int i = 1; i < 8; i++) {
-						b[i - 1] = words[i].equals("1") ? true : false;
+					for (int d = 1; d < 8; d++) {
+						b[d - 1] = words[d].equals("1") ? true : false;
 					}
-					String startDate = words[8];
-					String endDate = words[9];
+					String startDate = words[startDateIndex]; //8
+					String endDate = words[endDateIndex]; //9
 					WeekdayFilter wdf = new WeekdayFilter();
 					wdf.setName(name);
 					wdf.setDays(b);
 					wdf.setFromDate(startDate);
 					wdf.setToDate(endDate);
 					entries.put(name, wdf);
+					
 				} catch (Exception e) {
 					System.out.println("Error parsing weekdays filter");
 					e.printStackTrace();
 				}
 			}
 		}
-
-		// }
 
 		return entries;
 
@@ -841,11 +909,18 @@ public class OTPHandler {
 				+ System.getProperty("file.separator") + agencyId + System.getProperty("file.separator")
 				+ Constants.GTFS_TRIPS);
 
-		for (String[] words : lines) {
+		// route_id,service_id,trip_id,trip_headsign,direction_id,shape_id,wheelchair_accessible
+		int routeIdIndex = getFieldIndex(Constants.TRIP_ROUTE_ID, lines.get(0));
+		int tripIdIndex = getFieldIndex(Constants.TRIP_ID, lines.get(0));
+		int tripServiceIdIndex = getFieldIndex(Constants.TRIP_SERVICE_ID, lines.get(0));
+
+		for (int i = 1; i < lines.size(); i++) {
+
+			String[] words = lines.get(i);
 			try {
-				String routeId = words[0];
-				String recurrence = agencyId + "_" + words[1]; // new
-				String tripId = words[2];
+				String routeId = words[routeIdIndex];
+				String recurrence = agencyId + "_" + words[tripServiceIdIndex]; // new
+				String tripId = words[tripIdIndex];
 				Trips trips = new Trips();
 				trips.setRouteId(routeId);
 				trips.getTripIds().add(tripId);
@@ -856,8 +931,6 @@ public class OTPHandler {
 				e.printStackTrace();
 			}
 		}
-
-		// }
 
 		return entries;
 	}
@@ -874,22 +947,31 @@ public class OTPHandler {
 		String lastTime = null;
 		String lastTripId = null;
 		int lastSequence = 1;
-		for (String[] words : lines) {
-			try {
-				String tripId = words[0];
-				String time = words[1];
-				// String time2 = words[2];
-				// if (!time.equals(time2)) {
-				// System.err.println("WARN different arrival/departure: " +
-				// tripId +
-				// " = " + time + "/" + time2);
-				// }
+		
+		// route_id,service_id,trip_id,trip_headsign,direction_id,shape_id,wheelchair_accessible
+		int tripIdIndex = getFieldIndex(Constants.STIMES_TRIP_ID, lines.get(0));
+		int stopIdIndex = getFieldIndex(Constants.STIMES_STOP_ID, lines.get(0));
+		int stopSequenceIndex = getFieldIndex(Constants.STIMES_STOP_SEQ, lines.get(0));
+		int arrivalTimeIndex = getFieldIndex(Constants.STIMES_ARRIVAL_TIME, lines.get(0));
+		int departureTimeIndex = getFieldIndex(Constants.STIMES_DEPARTURE_TIME, lines.get(0));
+	
+		for (int i = 1; i < lines.size(); i++) {
 
+			String[] words = lines.get(i);
+			
+			try {
+				
+				String tripId = words[tripIdIndex]; // 0
+				String time = words[arrivalTimeIndex]; // 1
+				
 				if (time.length() == 8) {
 					time = time.substring(0, 5);
 				}
-				String stopId = words[3];
-				int sequence = Integer.parseInt(words[4]);
+				
+				String stopId = words[stopIdIndex]; // 3
+				
+				int sequence = Integer.parseInt(words[stopSequenceIndex]); //4
+				
 				TripTimeEntry entry = new TripTimeEntry();
 
 				if (tripId.equals(lastTripId)) {
@@ -910,12 +992,11 @@ public class OTPHandler {
 				lastTime = time;
 				lastTripId = tripId;
 			} catch (Exception e) {
-				System.out.println("Error parsing schedule " + words[4]);
+				System.out.println("Error parsing schedule " + words[stopSequenceIndex]);
 				e.printStackTrace();
 			}
 		}
 
-		// }
 
 		return entries;
 	}
