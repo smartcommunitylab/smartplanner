@@ -184,19 +184,8 @@ For reference check in the distribution '..trentino/cache/bike|car' folder.
 2.4 GTFS files.
 ---------------
 GTFS configuration is distributed at agency level. For each agency it is required to provide following files.
-The files are to be place inside 'trip', 'stop' and 'schedule' folders as described below.
-
-- trips.txt
-- calendar_dates
-- calendar.txt
-- stop_times.txt
-- stop.txt
-
-Note:  If calendar_dates.txt includes ALL dates of service, this file may be specified instead of calendar.txt.
-
-The trips.txt and stops.txt files are to be placed inside corresponding 'trip' and 'stop' folders, while trips.txt, stop_times.txt, and
-the two calendar(txt) files are to be place inside schedule folder.
-
+The gtfs zip files mut be present inside $OTP_HOME/<router>/gtfs folder. At build/run time the the gtfs files are extranced inside 'schedule' folder and will
+be manipulated at build/run time.
 
 2.4 Graph
 ---------
