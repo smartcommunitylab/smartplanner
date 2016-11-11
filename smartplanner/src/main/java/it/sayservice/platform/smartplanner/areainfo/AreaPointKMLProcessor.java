@@ -69,8 +69,13 @@ public class AreaPointKMLProcessor implements AreaPointProcessor {
 					data.put(d.getName(), d.getValue());
 				}
 				point.setId(mapper.getId(data));
-				point.setAreaId(mapper.getArea(data));
-				point.setCostZoneId(mapper.getCostZone(data));
+				if(point.getData()!=null && point.getData().getSearchTime()!=null){
+					point.getData().getSearchTime().setSearchAreaId(mapper.getArea(data));
+				}
+				
+				if(point.getData()!=null && point.getData().getFares()!=null){
+					point.getData().getFares().setCostZoneId(mapper.getCostZone(data));
+				}
 
 				List<double[]> positions = new ArrayList<double[]>();
 				Polygon polygon = (Polygon) pm.getGeometry();

@@ -17,15 +17,28 @@
 
 package it.sayservice.platform.smartplanner.areainfo;
 
-import it.sayservice.platform.smartplanner.model.CostData;
-import it.sayservice.platform.smartplanner.model.FaresData;
-
 import java.io.InputStream;
 import java.util.List;
 import java.util.Map;
 
-public interface CostDataProcessor {
-	public Map<String, CostData> read(InputStream is) throws Exception;
+import org.codehaus.jackson.map.ObjectMapper;
+import org.codehaus.jackson.type.TypeReference;
 
-	public List<FaresData> readList(InputStream is) throws Exception;
+public class SearchTimeJSONProcessor implements SearchTimeProcessor {
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<SearchTime> readList(InputStream is) throws Exception {
+		ObjectMapper om = new ObjectMapper();
+		List<SearchTime> searchTimeList = om.readValue(is, new TypeReference<List<SearchTime>>(){});
+		return searchTimeList;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public Map<String, SearchTime> read(InputStream is) throws Exception {
+		ObjectMapper om = new ObjectMapper();
+		return om.readValue(is, Map.class);
+	}
+
 }

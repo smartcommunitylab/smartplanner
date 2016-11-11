@@ -28,7 +28,7 @@ import it.sayservice.platform.smartplanner.data.message.TType;
 import it.sayservice.platform.smartplanner.geocoder.GeocodeAPIsManager;
 import it.sayservice.platform.smartplanner.model.AreaPoint;
 import it.sayservice.platform.smartplanner.model.CostData;
-import it.sayservice.platform.smartplanner.model.FaresZonePeriod;
+import it.sayservice.platform.smartplanner.model.FaresPeriod;
 import it.sayservice.platform.smartplanner.model.StreetLocation;
 import it.sayservice.platform.smartplanner.mongo.repos.AreaPointRepository;
 import it.sayservice.platform.smartplanner.utils.Constants;
@@ -397,14 +397,19 @@ public class CarOnly {
 					List<AreaPoint> points = areaPointRepository.findByLocationNear(p, d);
 					if (points != null && !points.isEmpty()) {
 						Map<String, Object> extra = new HashMap<String, Object>();
-						SearchTime st = mapper.convertValue((Map) points.get(0).getData().getSearchTimeData(), SearchTime.class);
+						SearchTime st = mapper.convertValue((Map) points.get(0).getData().getSearchTime(), SearchTime.class);
 						TimeAndRangeSlot slot = null;
 						if (st != null && (slot = st.compute(leg.getEndtime())) != null) {
 							extra.put("searchTime", slot);
 						}
 
-						FaresZonePeriod[] fareZonePeriod = points.get(0).getFaresZonePeriod();
-						CostData cd = fareZonePeriod[0].getCostData();
+						FaresPeriod[] fareZonePeriod = null;
+						CostData cd = null;
+						if(points.get(0).getData()!=null && points.get(0).getData().getFares()!=null&&
+							 points.get(0).getData().getFares().getFaresPeriod()!=null){
+							fareZonePeriod = points.get(0).getData().getFares().getFaresPeriod();
+							cd = fareZonePeriod[0].getCostData();
+						}
 
 						if (cd != null) {
 							extra.put("costData", cd);

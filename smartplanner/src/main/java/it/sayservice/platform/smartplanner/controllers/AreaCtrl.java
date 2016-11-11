@@ -17,6 +17,17 @@
 
 package it.sayservice.platform.smartplanner.controllers;
 
+import it.sayservice.platform.smartplanner.areainfo.AreaInfoLoader;
+import it.sayservice.platform.smartplanner.areainfo.SearchTime;
+import it.sayservice.platform.smartplanner.configurations.ConfigurationManager;
+import it.sayservice.platform.smartplanner.configurations.MongoRouterMapper;
+import it.sayservice.platform.smartplanner.exception.SmartPlannerException;
+import it.sayservice.platform.smartplanner.model.AreaPoint;
+import it.sayservice.platform.smartplanner.model.FaresData;
+import it.sayservice.platform.smartplanner.model.Response;
+import it.sayservice.platform.smartplanner.mongo.repos.AreaPointRepository;
+import it.sayservice.platform.smartplanner.utils.Constants;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -32,21 +43,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-import it.sayservice.platform.smartplanner.areainfo.AreaData;
-import it.sayservice.platform.smartplanner.areainfo.AreaInfoLoader;
-import it.sayservice.platform.smartplanner.areainfo.CostDataZone;
-import it.sayservice.platform.smartplanner.areainfo.SearchTime;
-import it.sayservice.platform.smartplanner.configurations.ConfigurationManager;
-import it.sayservice.platform.smartplanner.configurations.MongoRouterMapper;
-import it.sayservice.platform.smartplanner.exception.SmartPlannerException;
-import it.sayservice.platform.smartplanner.model.AreaPoint;
-import it.sayservice.platform.smartplanner.model.CostData;
-import it.sayservice.platform.smartplanner.model.FaresZone;
-import it.sayservice.platform.smartplanner.model.FaresZonePeriod;
-import it.sayservice.platform.smartplanner.model.Response;
-import it.sayservice.platform.smartplanner.mongo.repos.AreaPointRepository;
-import it.sayservice.platform.smartplanner.utils.Constants;
 
 @Controller
 //@RequestMapping("/smart-planner")
@@ -122,54 +118,52 @@ public class AreaCtrl {
 	}
 
 	//fare oggetto areadata con il solo campo searchtime
-	@RequestMapping(method = RequestMethod.POST, value = "/{router}/rest/data/areadata/{region}")
+	@RequestMapping(method = RequestMethod.POST, value = "/{router}/rest/data/searchtime/{region}")
 	public @ResponseBody void updateAreaData(@PathVariable String region, @PathVariable String router,
-			@RequestBody List<AreaData> areaDataZoneList) {
-		Map<String, AreaData> areaDataMap = getDataMapByCostZoneList(areaDataZoneList);
-		loadPoints(region, null, areaDataMap, null, router, null);
+			@RequestBody List<SearchTime> searchTimeZoneList) {
+		Map<String, SearchTime> searchTimeMap = getSearchTimeZoneListMapByCostZoneList(searchTimeZoneList);
+		loadPoints(region, null, searchTimeMap, null, router, null);
 	}
 
-	private Map<String, AreaData> getDataMapByCostZoneList(List<AreaData> areaDataZoneList) {
-		Map<String, AreaData> areaDataMap = new HashMap<String, AreaData>();
-		for (int i = 0; i < areaDataZoneList.size(); i++) {
-			AreaData areaDataNotMapped = areaDataZoneList.get(i);
-			AreaData areaDataMapped = areaDataMap.get(areaDataNotMapped.getCostZoneId());
+	private Map<String, SearchTime> getSearchTimeZoneListMapByCostZoneList(List<SearchTime> searchTimeZoneList) {
+		Map<String, SearchTime> searchTimeMap = new HashMap<String, SearchTime>();
+		for (int i = 0; i < searchTimeZoneList.size(); i++) {
+			SearchTime searchTimeNotMapped = searchTimeZoneList.get(i);
+			SearchTime searchTimeMapped = searchTimeMap.get(searchTimeNotMapped.getSearchAreaId());
 
-			if (areaDataMapped==null){
-				areaDataMap.put(areaDataNotMapped.getCostZoneId(), areaDataNotMapped);
+			if (searchTimeMapped==null){
+				searchTimeMap.put(searchTimeNotMapped.getSearchAreaId(), searchTimeNotMapped);
 			}
-
 		}
 
-		return areaDataMap;
+		return searchTimeMap;
 	}
 
-	@RequestMapping(method = RequestMethod.POST, value = "/{router}/rest/data/areacosts/{region}")
+	@RequestMapping(method = RequestMethod.POST, value = "/{router}/rest/data/fares/{region}")
 	public @ResponseBody void updateAreaCosts(@PathVariable String region, @PathVariable String router,
-			@RequestBody List<FaresZone> faresZoneList) {
-		Map<String, FaresZonePeriod[]> faresZoneMap = getFaresZoneMapByFaresZoneList(faresZoneList);
-		loadPoints(region, null, null, faresZoneMap, router, null);
+			@RequestBody List<FaresData> faresDataList) {
+		Map<String, FaresData> faresPeriodListMap = getFaresDataMapByFaresDataList(faresDataList);
+		loadPoints(region, null, null, faresPeriodListMap, router, null);
 	}
 
-	private Map<String, FaresZonePeriod[]> getFaresZoneMapByFaresZoneList(List<FaresZone> faresZoneList) {
-		Map<String, FaresZonePeriod[]> faresZoneMap = new HashMap<String, FaresZonePeriod[]>();
-		for (int i = 0; i < faresZoneList.size(); i++) {
-			FaresZone faresZone = faresZoneList.get(i);
-			FaresZonePeriod[] faresZonePeriodList = faresZoneMap.get(faresZone.getCostZoneId());
+	private Map<String, FaresData> getFaresDataMapByFaresDataList(List<FaresData> faresDataList) {
+		Map<String, FaresData> faresDataMap = new HashMap<String, FaresData>();
+		for (int i = 0; i < faresDataList.size(); i++) {
+			FaresData faresDataNotMapped = faresDataList.get(i);
+			FaresData faresDataMapped = faresDataMap.get(faresDataNotMapped.getCostZoneId());
 
-			if (faresZonePeriodList==null){
-				faresZonePeriodList = faresZone.getFaresZonePeriods();
-				faresZoneMap.put(faresZone.getCostZoneId(), faresZonePeriodList);
+			if (faresDataMapped==null){
+				faresDataMap.put(faresDataNotMapped.getCostZoneId(), faresDataNotMapped);
 			}
 
 		}
 
-		return faresZoneMap;
+		return faresDataMap;
 	}
 
 
-	public void loadPoints(String region, List<AreaPoint> points, Map<String, AreaData> areaDataMap,
-		Map<String, FaresZonePeriod[]> faresZoneMap, String router, SearchTime searchTimeData) {
+	public void loadPoints(String region, List<AreaPoint> points, Map<String, SearchTime> searchTimeMap,
+		Map<String, FaresData> faresDataMap, String router, SearchTime searchTimeData) {
 
 		List<AreaPoint> newPoints;
 
@@ -188,11 +182,15 @@ public class AreaCtrl {
 					point.setId(region + Constants.AREA_SEPARATOR_KEY + point.getId());
 					point.setRegionId(region);
 				}
-				if (areaDataMap != null && areaDataMap.containsKey(point.getAreaId())) {
-					point.setData(areaDataMap.get(point.getAreaId()));
+				if (searchTimeMap != null && point.getData()!=null && 
+						point.getData().getSearchTime()!= null && point.getData().getSearchTime().getSearchAreaId()!=null && 
+						searchTimeMap.containsKey(point.getData().getSearchTime().getSearchAreaId())) {
+					point.getData().setSearchTime((searchTimeMap.get(point.getData().getSearchTime().getSearchAreaId())));
 				}
-				if (faresZoneMap != null && faresZoneMap.containsKey(point.getCostZoneId())) {
-					point.setFaresZonePeriod(faresZoneMap.get(point.getCostZoneId()));
+				if (faresDataMap != null && point.getData()!=null &&
+						point.getData().getFares() != null && point.getData().getFares().getCostZoneId() != null &&
+								faresDataMap.containsKey(point.getData().getFares().getCostZoneId())) {
+					point.getData().setFares((faresDataMap.get(point.getData().getFares().getCostZoneId())));
 				}
 
 				areaPointRepository.save(point);

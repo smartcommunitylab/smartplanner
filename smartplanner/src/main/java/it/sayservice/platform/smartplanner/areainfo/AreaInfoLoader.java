@@ -17,6 +17,13 @@
 
 package it.sayservice.platform.smartplanner.areainfo;
 
+import it.sayservice.platform.smartplanner.configurations.RouterConfig;
+import it.sayservice.platform.smartplanner.model.AreaPoint;
+import it.sayservice.platform.smartplanner.model.FaresData;
+import it.sayservice.platform.smartplanner.mongo.repos.AreaPointRepository;
+import it.sayservice.platform.smartplanner.utils.Agency;
+import it.sayservice.platform.smartplanner.utils.Constants;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -24,18 +31,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import it.sayservice.platform.smartplanner.configurations.RouterConfig;
-import it.sayservice.platform.smartplanner.model.AreaPoint;
-import it.sayservice.platform.smartplanner.model.FaresZone;
-import it.sayservice.platform.smartplanner.model.FaresZonePeriod;
-import it.sayservice.platform.smartplanner.mongo.repos.AreaPointRepository;
-import it.sayservice.platform.smartplanner.utils.Agency;
-import it.sayservice.platform.smartplanner.utils.Constants;
-
 public class AreaInfoLoader {
 
 	private AreaPointRepository repository;
-	private AreaDataJSONProcessor dataProcessor = new AreaDataJSONProcessor();
+	private SearchTimeJSONProcessor searchTimeProcessor = new SearchTimeJSONProcessor();
 	private AreaPointJSONProcessor pointProcessor = new AreaPointJSONProcessor();
 	private CostDataJSONProcessor costProcessor = new CostDataJSONProcessor();
 
@@ -64,31 +63,49 @@ public class AreaInfoLoader {
 	protected void loadRegionPoints(Agency agency, String router) throws Exception, FileNotFoundException {
 		File pointsFile = new File(System.getenv("OTP_HOME") + System.getProperty("file.separator") + router
 				+ System.getProperty("file.separator") + agency.getPointsfilePath());
-		File dataFile = new File(System.getenv("OTP_HOME") + System.getProperty("file.separator") + router
+		File searchTimeFile = new File(System.getenv("OTP_HOME") + System.getProperty("file.separator") + router
 				+ System.getProperty("file.separator") + agency.getDatafilePath());
 		File costFile = new File(System.getenv("OTP_HOME") + System.getProperty("file.separator") + router
 				+ System.getProperty("file.separator") + agency.getCostfilePath());
-		List<AreaData> areaDataList = dataProcessor.readList(new FileInputStream(dataFile));
+		
+		List<SearchTime> searchTimeList = null;
+		
+		if (searchTimeFile.exists()) {
+			searchTimeList = searchTimeProcessor.readList(new FileInputStream(searchTimeFile));
+		}
+		Map<String, SearchTime> searchTimeMap = getSearchTimeMapFromSearchTimeList(searchTimeList);
 
-		Map<String, AreaData> areaDataMap = getAreaDataMapFromAreaDataList(areaDataList);
-
-		List<FaresZone> faresZonesList = null;
+		List<FaresData> faresZonesList = null;
 
 		if (costFile.exists()) {
 			faresZonesList = costProcessor.readList(new FileInputStream(costFile));
 		}
 
-		Map<String, FaresZone> faresZoneMap = getFaresZoneMapFromFaresZonesList(faresZonesList);
+		Map<String, FaresData> faresDataMap = getFaresDataMapFromFaresZonesList(faresZonesList);
 
 		List<AreaPoint> points = pointProcessor.read(new FileInputStream(pointsFile));
 		for (AreaPoint point : points) {
 			point.setId(agency.getRegion() + Constants.AREA_SEPARATOR_KEY + point.getId());
 			point.setRegionId(agency.getRegion());
-			point.setData(areaDataMap.get(point.getAreaId()));
-			if (faresZoneMap != null && faresZoneMap.containsKey(point.getCostZoneId())) {
-				FaresZonePeriod[] fareZonePeriod = faresZoneMap.get(point.getCostZoneId()).getFaresZonePeriods();
-				point.setFaresZonePeriod(fareZonePeriod);
+			
+			AreaData areaData = new AreaData();
+			
+			if(point.getData()!=null && point.getData().getSearchTime()!=null &&
+				 point.getData().getSearchTime().getSearchAreaId()!=null &&
+				 searchTimeMap.get(point.getData().getSearchTime().getSearchAreaId())!=null){
+				SearchTime searchTimeMapped = searchTimeMap.get(point.getData().getSearchTime().getSearchAreaId());
+				areaData.setSearchTime(searchTimeMapped);
 			}
+
+			if(point.getData()!=null && point.getData().getFares()!=null &&
+				 point.getData().getFares().getCostZoneId()!=null &&
+				 faresDataMap.get(point.getData().getFares().getCostZoneId())!=null){
+				 FaresData faresDataMapped = faresDataMap.get(point.getData().getFares().getCostZoneId());
+				 areaData.setFares(faresDataMapped);
+				}
+
+			point.setData(areaData);
+			
 			if (repository.findOne(point.getId()) == null) {
 				try {
 					repository.save(point);
@@ -99,26 +116,26 @@ public class AreaInfoLoader {
 		}
 	}
 
-	private Map<String, FaresZone> getFaresZoneMapFromFaresZonesList(List<FaresZone> faresZonesList) {
-		Map<String, FaresZone> faresZoneMap = new HashMap<String, FaresZone>();
+	private Map<String, FaresData> getFaresDataMapFromFaresZonesList(List<FaresData> faresDataList) {
+		Map<String, FaresData> faresDataMap = new HashMap<String, FaresData>();
 
-		for (int i = 0; i < faresZonesList.size(); i++) {
-			FaresZone faresZone = faresZonesList.get(i);
-			faresZoneMap.put(faresZone.getCostZoneId(), faresZone);
+		for (int i = 0; i < faresDataList.size(); i++) {
+			FaresData faresData = faresDataList.get(i);
+			faresDataMap.put(faresData.getCostZoneId(), faresData);
 		}
 
-		return faresZoneMap;
+		return faresDataMap;
 	}
 
-	private Map<String, AreaData> getAreaDataMapFromAreaDataList(List<AreaData> areaDataList) {
-		Map<String, AreaData> areaDataMap = new HashMap<String, AreaData>();
+	private Map<String, SearchTime> getSearchTimeMapFromSearchTimeList(List<SearchTime> searchTimeList) {
+		Map<String, SearchTime> searchTimeMap = new HashMap<String, SearchTime>();
 
-		for (int i = 0; i < areaDataList.size(); i++) {
-			AreaData areaData = areaDataList.get(i);
-			areaDataMap.put(areaData.getCostZoneId(), areaData);
+		for (int i = 0; i < searchTimeList.size(); i++) {
+			SearchTime searchTime = searchTimeList.get(i);
+			searchTimeMap.put(searchTime.getSearchAreaId(), searchTime);
 		}
 
-		return areaDataMap;
+		return searchTimeMap;
 	}
 
 	public void loadData(RouterConfig routerConfig, String regionId) throws Exception {

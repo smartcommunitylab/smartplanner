@@ -6,7 +6,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class FaresZonePeriod {
+public class FaresPeriod {
 
 	String fromDate;
 	String toDate;

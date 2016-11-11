@@ -1,24 +1,25 @@
 package it.sayservice.platform.smartplanner.areainfo;
 
+import it.sayservice.platform.smartplanner.model.FaresData;
+
 public class AreaData {
 
-	SearchTime searchTimeData;
-	public String costZoneId;
+	SearchTime searchTime;
+	private FaresData fares;
 
-	public SearchTime getSearchTimeData() {
-		return searchTimeData;
+	public SearchTime getSearchTime() {
+		return searchTime;
 	}
 
-	public void setSearchTimeData(SearchTime searchTimeData) {
-		this.searchTimeData = searchTimeData;
+	public void setSearchTime(SearchTime searchTime) {
+		this.searchTime = searchTime;
 	}
 
-	public String getCostZoneId() {
-		return costZoneId;
+	public FaresData getFares() {
+		return fares;
 	}
 
-	public void setCostZoneId(String costZoneId) {
-		this.costZoneId = costZoneId;
+	public void setFares(FaresData fares) {
+		this.fares = fares;
 	}
-
 }

@@ -27,13 +27,9 @@ public class AreaPoint {
 	@Id
 	private String id;
 	private String regionId;
-	private String areaId;
 	@GeoSpatialIndexed
 	private double[] location;
-	private String costZoneId;
-
 	private AreaData data;
-	private FaresZonePeriod[] faresZonePeriod;
 
 	public String getId() {
 		return id;
@@ -51,14 +47,6 @@ public class AreaPoint {
 		this.regionId = regionId;
 	}
 
-	public String getAreaId() {
-		return areaId;
-	}
-
-	public void setAreaId(String areaId) {
-		this.areaId = areaId;
-	}
-
 	public double[] getLocation() {
 		return location;
 	}
@@ -73,21 +61,5 @@ public class AreaPoint {
 
 	public void setData(AreaData data) {
 		this.data = data;
-	}
-
-	public String getCostZoneId() {
-		return costZoneId;
-	}
-
-	public void setCostZoneId(String costZoneId) {
-		this.costZoneId = costZoneId;
-	}
-
-	public FaresZonePeriod[] getFaresZonePeriod() {
-		return faresZonePeriod;
-	}
-
-	public void setFaresZonePeriod(FaresZonePeriod[] faresZonePeriods) {
-		this.faresZonePeriod = faresZonePeriods;
 	}
 }

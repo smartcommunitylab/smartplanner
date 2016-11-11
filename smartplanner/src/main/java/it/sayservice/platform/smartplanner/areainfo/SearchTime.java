@@ -21,6 +21,7 @@ import java.util.Calendar;
 
 public class SearchTime {
 
+	public String searchAreaId;
 	public SearchTimeWeekDayList weekDayList = new SearchTimeWeekDayList();
 
 	public TimeAndRangeSlot compute(long timestamp) {
@@ -42,5 +43,13 @@ public class SearchTime {
 
 	public void setWeekDayList(SearchTimeWeekDayList weekDayList) {
 		this.weekDayList = weekDayList;
+	}
+
+	public String getSearchAreaId() {
+		return searchAreaId;
+	}
+
+	public void setSearchAreaId(String searchAreaId) {
+		this.searchAreaId = searchAreaId;
 	}
 }

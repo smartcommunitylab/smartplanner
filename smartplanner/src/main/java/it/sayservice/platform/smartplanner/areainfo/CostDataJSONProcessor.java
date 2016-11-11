@@ -18,10 +18,9 @@
 package it.sayservice.platform.smartplanner.areainfo;
 
 import it.sayservice.platform.smartplanner.model.CostData;
-import it.sayservice.platform.smartplanner.model.FaresZone;
+import it.sayservice.platform.smartplanner.model.FaresData;
 
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -33,9 +32,9 @@ public class CostDataJSONProcessor implements CostDataProcessor {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<FaresZone> readList(InputStream is) throws Exception {
+	public List<FaresData> readList(InputStream is) throws Exception {
 		ObjectMapper om = new ObjectMapper();
-		List<FaresZone> result = om.readValue(is, new TypeReference<List<FaresZone>>(){});
+		List<FaresData> result = om.readValue(is, new TypeReference<List<FaresData>>(){});
 
 		return result;
 	}

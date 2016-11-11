@@ -1,7 +1,5 @@
 package it.sayservice.platform.smartplanner.areainfo;
 
-import java.util.ArrayList;
-import java.util.List;
 
 public class SearchTimeWeekDayList {
 
