@@ -6,6 +6,7 @@ public class ValidityPeriod {
 	String to;
 	String[] weekDays;
 	String timeSlot;
+	String timeSlots;
 	int rateValue;
 	String note;
 	String dayOrNight;
@@ -73,6 +74,14 @@ public class ValidityPeriod {
 
 	public void setHoliday(boolean holiday) {
 		this.holiday = holiday;
+	}
+
+	public String getTimeSlots() {
+		return timeSlots;
+	}
+
+	public void setTimeSlots(String timeSlots) {
+		this.timeSlots = timeSlots;
 	}
 
 }

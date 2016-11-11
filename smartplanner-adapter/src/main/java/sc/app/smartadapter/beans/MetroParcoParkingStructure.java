@@ -1,8 +1,8 @@
 package sc.app.smartadapter.beans;
 
+import sc.app.smartadapter.configuration.RemoteBeanConfiguration;
 import sc.app.smartadapter.restful.client.RemoteBean;
 import sc.app.smartadapter.restful.client.SmartPlannerBean;
-import sc.app.smartdapter.configuration.RemoteBeanConfiguration;
 
 public class MetroParcoParkingStructure implements RemoteBean {
 
@@ -188,8 +188,8 @@ public class MetroParcoParkingStructure implements RemoteBean {
 	}
 
 	@Override
-	public SmartPlannerBean adaptBean(RemoteBeanConfiguration remoteBeanConfiguration) {
-		// TODO Auto-generated method stub
+	public SmartPlannerBean adaptBean(String agencyId, RemoteBeanConfiguration remoteBeanConfiguration) {
+		
 		return null;
 	}
 

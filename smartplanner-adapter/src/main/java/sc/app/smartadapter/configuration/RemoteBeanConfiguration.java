@@ -1,4 +1,4 @@
-package sc.app.smartdapter.configuration;
+package sc.app.smartadapter.configuration;
 
 import java.lang.reflect.Field;
 import java.util.Map;
@@ -7,6 +7,9 @@ public class RemoteBeanConfiguration {
 	String remote_bean_id;
 	String remote_url;
 	String sp_url;
+	boolean rateInfo;
+	boolean searchTime;
+
 	Map<String, String> input_filters;
 
 	public String getRemote_bean_id() {
@@ -41,6 +44,22 @@ public class RemoteBeanConfiguration {
 		this.input_filters = input_filters;
 	}
 
+	public boolean isRateInfo() {
+		return rateInfo;
+	}
+
+	public void setRateInfo(boolean rateInfo) {
+		this.rateInfo = rateInfo;
+	}
+
+	public boolean isSearchTime() {
+		return searchTime;
+	}
+
+	public void setSearchTime(boolean searchTime) {
+		this.searchTime = searchTime;
+	}
+
 	@Override
 	public String toString() {
 		String filterMapString = "[";
@@ -49,7 +68,7 @@ public class RemoteBeanConfiguration {
 		}
 		filterMapString += "]";
 
-		return "RemoteBeanConfiguration [remote_url=" + remote_url + ", sp_url=" + sp_url + ", inputFilter=" + filterMapString + "]";
+		return "RemoteBeanConfiguration [remote_bean_id=" + remote_bean_id + ", remote_url=" + remote_url + ", sp_url=" + sp_url + ", rateInfo=" + rateInfo + ", searchTime=" + searchTime + ", inputFilter=" + filterMapString + "]";
 	}
 
 	public static void main(String[] args) {

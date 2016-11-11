@@ -1,4 +1,4 @@
-package sc.app.smartdapter.configuration;
+package sc.app.smartadapter.configuration;
 
 public class ClassAdapterConfiguration {
 

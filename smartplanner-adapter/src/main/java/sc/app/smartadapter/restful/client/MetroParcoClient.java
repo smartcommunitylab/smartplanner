@@ -1,11 +1,13 @@
 package sc.app.smartadapter.restful.client;
 
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+import sc.app.smartadapter.beans.MetroParcoBikePoint;
 import sc.app.smartadapter.beans.MetroParcoStreet;
 
 import com.fasterxml.jackson.core.JsonParseException;
@@ -43,21 +45,35 @@ public class MetroParcoClient {
 
 		Class beanClass = null;
 		try {
-			beanClass = Class.forName("sc.app.smartadapter.beans.MetroParcoStreet");
+			beanClass = Class.forName("sc.app.smartadapter.beans.MetroParcoBikePoint");
 		} catch (ClassNotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		boolean isFiltered = true;
+		Class<?> clazz = beanClass.getClass();
+		Field field = null;
 
-		MetroParcoClient mpBikeStation = new MetroParcoClient();
+		try {
+			String fieldName = "urlSuffix";
+			field = beanClass.getDeclaredField(fieldName);
+			field.setAccessible(true);
+			String value = (String) field.get(beanClass);
+			System.out.println("value: "+value);
+		}catch (Exception e) {
+			System.out.println("exc: "+e);
+		}			
 
-		List<RemoteBean> beanList = new ArrayList<RemoteBean>();
-
-		beanList = mpBikeStation.getBeanFromRestFullServer("https://tn.smartcommunitylab.it/metroparco/rest/nosec/tn/street", beanClass);
-
-		for (int i = 0; i < beanList.size(); i++) {
-			MetroParcoStreet bean = (MetroParcoStreet) beanList.get(i);
-			System.out.println("bs["+i+"]: "+bean.getId());
-		}
+		//MetroParcoClient mpClient = new MetroParcoClient();
+    //
+		//List<RemoteBean> beanList = new ArrayList<RemoteBean>();
+    //
+		//beanList = mpClient.getBeanFromRestFullServer("https://tn.smartcommunitylab.it/metroparco/rest/nosec/tn/street", beanClass);
+    //
+		//for (int i = 0; i < beanList.size(); i++) {
+		//	MetroParcoStreet bean = (MetroParcoStreet) beanList.get(i);
+		//	System.out.println("bs["+i+"]: "+bean.getId());
+		//}
 	}
 }

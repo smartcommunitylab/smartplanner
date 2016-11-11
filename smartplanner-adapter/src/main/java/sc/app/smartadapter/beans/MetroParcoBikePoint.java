@@ -1,33 +1,33 @@
 package sc.app.smartadapter.beans;
 
 import it.sayservice.platform.smartplanner.data.message.StopId;
+import sc.app.smartadapter.configuration.RemoteBeanConfiguration;
 import sc.app.smartadapter.restful.client.RemoteBean;
 import sc.app.smartadapter.restful.client.SmartPlannerBean;
-import sc.app.smartdapter.configuration.RemoteBeanConfiguration;
-
 
 /*
  *   {
-    "id": "5637351e389c9d26bf96777e",
-    "id_app": "tn",
-    "name": "stazione FS",
-    "bikeNumber": 20,
-    "slotNumber": 24,
-    "geometry": {
-      "lat": 46.07187784256046,
-      "lng": 11.119719743728638
-    },
-    "lastChange": null,
-    "zones": [
-      "56a79ed5e4b0d01ec4df0e7e"
-    ],
-    "agencyId": [
-      "tn_mob_091516"
-    ]
-  }
+ "id": "5637351e389c9d26bf96777e",
+ "id_app": "tn",
+ "name": "stazione FS",
+ "bikeNumber": 20,
+ "slotNumber": 24,
+ "geometry": {
+ "lat": 46.07187784256046,
+ "lng": 11.119719743728638
+ },
+ "lastChange": null,
+ "zones": [
+ "56a79ed5e4b0d01ec4df0e7e"
+ ],
+ "agencyId": [
+ "tn_mob_091516"
+ ]
+ }
  * */
-public class MetroParcoBikePoint implements RemoteBean{
+public class MetroParcoBikePoint implements RemoteBean {
 
+	String urlSuffix;
 	String id;
 	String id_app;
 	String name;
@@ -37,7 +37,6 @@ public class MetroParcoBikePoint implements RemoteBean{
 	String lastChange;
 	String[] zones;
 	String[] agencyId;
-
 
 	public String getId() {
 		return id;
@@ -111,8 +110,16 @@ public class MetroParcoBikePoint implements RemoteBean{
 		this.agencyId = agencyId;
 	}
 
+	public String getUrlSuffix() {
+		return urlSuffix;
+	}
+
+	public void setUrlSuffix(String urlSuffix) {
+		this.urlSuffix = urlSuffix;
+	}
+
 	@Override
-	public SmartPlannerBean adaptBean(RemoteBeanConfiguration remoteBeanConfiguration) {
+	public SmartPlannerBean adaptBean(String agencyId, RemoteBeanConfiguration remoteBeanConfiguration) {
 		EnhancedBikeStation bikeStation = new EnhancedBikeStation();
 
 		int bikeNumber = this.getBikeNumber();
@@ -122,7 +129,7 @@ public class MetroParcoBikePoint implements RemoteBean{
 		bikeStation.setPosts(slotNumber);
 
 		String name = this.getName();
-		if(name!=null){
+		if (name != null) {
 			bikeStation.setFullName(name);
 		}
 
@@ -134,8 +141,7 @@ public class MetroParcoBikePoint implements RemoteBean{
 
 		StopId stationId = new StopId();
 		stationId.setId(id);
-		String agencyId = remoteBeanConfiguration.getRemote_bean_id();
-		
+
 		stationId.setAgencyId(agencyId);
 
 		bikeStation.setStationId(stationId);
@@ -144,7 +150,7 @@ public class MetroParcoBikePoint implements RemoteBean{
 
 		return bikeStation;
 	}
-	
+
 	private double[] getPositionFromGeometry(Geometry geometry) {
 		double lat;
 		double lng;
@@ -152,7 +158,7 @@ public class MetroParcoBikePoint implements RemoteBean{
 		lat = Double.parseDouble(geometry.getLat());
 		lng = Double.parseDouble(geometry.getLng());
 
-		double[] position = {lat, lng};
+		double[] position = { lat, lng };
 
 		return position;
 	}

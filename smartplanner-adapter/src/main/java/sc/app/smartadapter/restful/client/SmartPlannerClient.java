@@ -2,14 +2,14 @@ package sc.app.smartadapter.restful.client;
 
 import it.sayservice.platform.smartplanner.model.CostData;
 import it.sayservice.platform.smartplanner.model.DayNight;
-import it.sayservice.platform.smartplanner.model.FaresZonePeriod;
+import it.sayservice.platform.smartplanner.model.FaresPeriod;
 import it.sayservice.platform.smartplanner.model.TimeSlot;
 import it.sayservice.platform.smartplanner.model.WeekDay;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import sc.app.smartadapter.beans.EnhancedFaresZones;
+import sc.app.smartadapter.beans.EnhancedFaresData;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -48,11 +48,11 @@ public class SmartPlannerClient {
 		try {
 
 				List<SmartPlannerBean> faresZoneList = new ArrayList<SmartPlannerBean>();
-				EnhancedFaresZones enFaresZone = new EnhancedFaresZones();
+				EnhancedFaresData enFaresZone = new EnhancedFaresData();
 				enFaresZone.setCostZoneId("50c742d044aed8a0d530565d");
-				FaresZonePeriod[] faresZonePeriods = new FaresZonePeriod[1];
+				FaresPeriod[] faresZonePeriods = new FaresPeriod[1];
 
-				FaresZonePeriod faresZonePeriod = new FaresZonePeriod();
+				FaresPeriod faresZonePeriod = new FaresPeriod();
 				CostData costData = new CostData();
 				String fixedCost = "1,30";
 				costData.setFixedCost(fixedCost);
@@ -78,7 +78,7 @@ public class SmartPlannerClient {
 				faresZonePeriod.setWeekDays(weekDays);
 
 				faresZonePeriods[0] = faresZonePeriod;
-				enFaresZone.setFaresZonePeriods(faresZonePeriods);
+				enFaresZone.setFaresPeriod(faresZonePeriods);
 
 				faresZoneList.add(enFaresZone);
 

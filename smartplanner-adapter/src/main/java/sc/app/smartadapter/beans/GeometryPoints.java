@@ -3,6 +3,7 @@ package sc.app.smartadapter.beans;
 public class GeometryPoints {
 
 	Geometry[] points;
+	Geometry[] pointObjs;
 
 	public Geometry[] getPoints() {
 		return points;
@@ -12,4 +13,11 @@ public class GeometryPoints {
 		this.points = points;
 	}
 
+	public Geometry[] getPointObjs() {
+		return pointObjs;
+	}
+
+	public void setPointObjs(Geometry[] pointObjs) {
+		this.pointObjs = pointObjs;
+	}
 }

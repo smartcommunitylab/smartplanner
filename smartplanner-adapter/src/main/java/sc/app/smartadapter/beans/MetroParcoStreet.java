@@ -1,8 +1,8 @@
 package sc.app.smartadapter.beans;
 
+import sc.app.smartadapter.configuration.RemoteBeanConfiguration;
 import sc.app.smartadapter.restful.client.RemoteBean;
 import sc.app.smartadapter.restful.client.SmartPlannerBean;
-import sc.app.smartdapter.configuration.RemoteBeanConfiguration;
 
 public class MetroParcoStreet implements RemoteBean{
 
@@ -13,8 +13,8 @@ public class MetroParcoStreet implements RemoteBean{
 	SlotsConfiguration[] slotsConfiguration;
 	boolean subscritionAllowedPark;
 	String rateAreaId; // ": "5637351e389c9d26bf96762a", --> bisogna fare una
-											// query con la rateaAreaId e reperire il costo dei
-											// parcheggi dell'area da associare a
+										 // query con la rateaAreaId e reperire il costo dei
+									   // parcheggi dell'area da associare a
 	GeometryPoints geometry;
 	String color;
 	String[] zones;
@@ -136,9 +136,31 @@ public class MetroParcoStreet implements RemoteBean{
 	}
 
 	@Override
-	public SmartPlannerBean adaptBean(RemoteBeanConfiguration remoteBeanConfiguration) {
-		// TODO Auto-generated method stub
-		return null;
+	public SmartPlannerBean adaptBean(String agencyId, RemoteBeanConfiguration remoteBeanConfiguration) {
+		EnhancedAreaPoint areaPoint = new EnhancedAreaPoint();
+		areaPoint.setRegionId(agencyId);
+		areaPoint.setId(this.getId());
+		areaPoint.setLocation(getPositionFromGeometry(this.getGeometry()));
+		
+		return areaPoint;
 	}
 
+	private double[] getPositionFromGeometry(GeometryPoints geometry) {
+		double lat = 0;
+		double lng = 0;
+
+		if(geometry.getPoints()!=null && geometry.getPoints()[0] != null){
+			 if(geometry.getPoints()[0].getLat() != null){
+				 lat = Double.parseDouble(geometry.getPoints()[0].getLat());
+			 }
+
+			 if(geometry.getPoints()[0].getLng() != null){
+				 lng = Double.parseDouble(geometry.getPoints()[0].getLng());
+			 }
+		}
+
+		double[] position = {lat, lng};
+
+		return position;
+	}
 }
