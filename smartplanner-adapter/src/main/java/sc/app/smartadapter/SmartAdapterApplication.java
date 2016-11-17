@@ -7,6 +7,7 @@ import sc.app.smartadapter.configuration.ConfigurationManager;
 import sc.app.smartadapter.configuration.RemoteBeanConfiguration;
 import sc.app.smartadapter.ingestion.MetroParcoIngestion;
 import sc.app.smartadapter.ingestion.MetroParcoIngestionFactory;
+import sc.app.smartadapter.ingestion.MetroParcoIngestionType;
 
 public class SmartAdapterApplication {
 
@@ -15,11 +16,13 @@ public class SmartAdapterApplication {
 		Map<String,Map<String,RemoteBeanConfiguration>> remoteBeanConfigurationMapOfTypeMap = ConfigurationManager.getRemoteBeanConfiguration();
 		Map<String, ClassAdapterConfiguration> classAdapterConfigurationMap = ConfigurationManager.getClassAdapterConfiguration();
 
-		for (String type : remoteBeanConfigurationMapOfTypeMap.keySet()) {
-			MetroParcoIngestion metroParcoIngestion = MetroParcoIngestionFactory.getIngestion(type);
+		for (String ingestionType : remoteBeanConfigurationMapOfTypeMap.keySet()) {
+			MetroParcoIngestionType metroParcoIngestionType = MetroParcoIngestionType.valueOf(ingestionType);
+			
+			MetroParcoIngestion metroParcoIngestion = MetroParcoIngestionFactory.getIngestion(metroParcoIngestionType);
 
-			ClassAdapterConfiguration classAdapterConfiguration = classAdapterConfigurationMap.get(type);
-			Map<String,RemoteBeanConfiguration> remoteBeanConfigurationAgencyMap = remoteBeanConfigurationMapOfTypeMap.get(type);
+			ClassAdapterConfiguration classAdapterConfiguration = classAdapterConfigurationMap.get(ingestionType);
+			Map<String,RemoteBeanConfiguration> remoteBeanConfigurationAgencyMap = remoteBeanConfigurationMapOfTypeMap.get(ingestionType);
 			
 			metroParcoIngestion.ingest(classAdapterConfiguration, remoteBeanConfigurationAgencyMap);
 		}

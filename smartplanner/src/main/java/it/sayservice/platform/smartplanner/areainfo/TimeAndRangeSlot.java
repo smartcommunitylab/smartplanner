@@ -108,4 +108,12 @@ public class TimeAndRangeSlot {
 		return "from hour: "+from+", to hour: "+to+"; min: "+min + ", max: " + max;
 	}
 
+	public static void main(String[] args) {
+		TimeAndRangeSlot trs = new TimeAndRangeSlot();
+		try {
+			trs.setFrom("00");
+		} catch (TimeSlotException e) {
+			e.printStackTrace();
+		}
+	}
 }

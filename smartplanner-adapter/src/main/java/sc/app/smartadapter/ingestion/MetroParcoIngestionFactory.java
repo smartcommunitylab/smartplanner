@@ -2,21 +2,18 @@ package sc.app.smartadapter.ingestion;
 
 public class MetroParcoIngestionFactory {
 
-	private static final Object METROPARCO_BIKE = "metroparco_bike";
-	private static final Object METROPARCO_STRUCTURE = "metroparco_parking";
 
-	public static MetroParcoIngestion getIngestion(String type) {
+	public static MetroParcoIngestion getIngestion(MetroParcoIngestionType type) {
 
 		MetroParcoIngestion metroParcoIngestionImpl = null;
 		
-		if(type.equals(METROPARCO_BIKE)){
+		if(type.equals(MetroParcoIngestionType.metroparco_bike)){
 			metroParcoIngestionImpl = new MetroParcoBikeIngestion();
 		}
 
-		if(type.equals(METROPARCO_STRUCTURE)){
-			metroParcoIngestionImpl = new MetroParcoStructureIngestion();
+		if(type.equals(MetroParcoIngestionType.metroparco_parking_street)){
+			metroParcoIngestionImpl = new MetroParcoSteetIngestion();
 		}
-
 
 		return metroParcoIngestionImpl;
 	}

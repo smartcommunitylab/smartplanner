@@ -12,9 +12,7 @@ public class MetroParcoStreet implements RemoteBean{
 	int slotNumber;
 	SlotsConfiguration[] slotsConfiguration;
 	boolean subscritionAllowedPark;
-	String rateAreaId; // ": "5637351e389c9d26bf96762a", --> bisogna fare una
-										 // query con la rateaAreaId e reperire il costo dei
-									   // parcheggi dell'area da associare a
+	String rateAreaId;
 	GeometryPoints geometry;
 	String color;
 	String[] zones;

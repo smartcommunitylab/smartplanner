@@ -1,4 +1,4 @@
 {
 	"metroparco_bike" : {"source_bean":"sc.app.smartadapter.beans.MetroParcoBikePoint"},
-	"metroparco_parking_structure" : {"source_bean":"sc.app.smartadapter.beans.MetroParcoBikePoint"}
+	"metroparco_parking_street" : {"source_bean":"sc.app.smartadapter.beans.MetroParcoStreet"}
 }

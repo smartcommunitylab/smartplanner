@@ -6,32 +6,28 @@ import java.util.List;
 
 public class TimeSlotList {
 
-	List<TimeAndRangeSlot> timeSlotList;
+	List<TimeAndRangeSlot> timeAndRangeSlotList;
 
 	public TimeSlotList() {
-		timeSlotList = new ArrayList<TimeAndRangeSlot>();
+		timeAndRangeSlotList = new ArrayList<TimeAndRangeSlot>();
 	}
 
-	public List<TimeAndRangeSlot> getTimeSlotList() {
-		return timeSlotList;
+	public List<TimeAndRangeSlot> getTimeAndRangeSlotList() {
+		return timeAndRangeSlotList;
 	}
 
-	public void setTimeSlotList(List<TimeAndRangeSlot> timeSlotList) {
-		this.timeSlotList = timeSlotList;
+	public void setTimeAndRangeSlotList(List<TimeAndRangeSlot> timeAndRangeSlotList) {
+		this.timeAndRangeSlotList = timeAndRangeSlotList;
 	}
 
-	public void addTimeSlot(TimeAndRangeSlot timeSlot){
-		timeSlotList.add(timeSlot);
-	}
-
-	public TimeAndRangeSlot getTimeSlot(Calendar calendar){
-		for (int i = 0; i < timeSlotList.size(); i++) {
-			TimeAndRangeSlot timeSlot = timeSlotList.get(i);
+	public TimeAndRangeSlot getTimeSlot(Calendar calendar) {
+		for (int i = 0; i < timeAndRangeSlotList.size(); i++) {
+			TimeAndRangeSlot timeSlot = timeAndRangeSlotList.get(i);
 
 			Calendar fromCal = getCalendarFromHour(calendar, timeSlot.getFromCalendar());
 			Calendar toCal = getCalendarFromHour(calendar, timeSlot.getToCalendar());
 
-			if(calendar.after(fromCal)&&calendar.before(toCal)){
+			if (calendar.after(fromCal) && calendar.before(toCal)) {
 
 				return timeSlot;
 			}
@@ -40,7 +36,7 @@ public class TimeSlotList {
 		return null;
 	}
 
-	private Calendar getCalendarFromHour(Calendar calendar, Calendar simpleHourCalendar){
+	private Calendar getCalendarFromHour(Calendar calendar, Calendar simpleHourCalendar) {
 		Calendar hourCal = Calendar.getInstance();
 		hourCal.setTime(calendar.getTime());
 		hourCal.set(Calendar.HOUR, simpleHourCalendar.get(Calendar.HOUR));
