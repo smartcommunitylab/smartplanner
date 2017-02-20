@@ -33,7 +33,6 @@ public class Constants {
 	public static final String OTP_RQ_TO = "toPlace";
 	public static final String OTP_RQ_MODE = "mode";
 	public static final String OTP_RQ_TIME = "time";
-	public static final String OTP_RQ_DEP_TIME = "departureTime";
 	public static final String OTP_RQ_DATE = "date";
 	public static final String OTP_RQ_ARRIVEBY = "arriveBy";
 	public static final String OTP_RQ_OPTIMIZE = "optimize";
@@ -136,9 +135,8 @@ public class Constants {
 	public static final String AUXILIARY_CACHE_DIR = "auxiliary";
 	public static final String AREA_CACHE_DIR = "areainfo";
 	public static final String AREA_SEPARATOR_KEY = "@";
-	public static final String TRIPS_FOLDER_PATH = "/cache/trips";
-	public static final String STOPS_FOLDER_PATH = "/cache/stops";
 	public static final String SCHEDULES_FOLDER_PATH = "/cache/schedules";
+	public static final String GTFS_FOLDER_PATH = "/gtfs";
 	public static final String NO_DATA_HASH = "da39a3ee5e6b4b0d3255bfef95601890afd80709";
 	public static final String INDEX_SUFFIX = "_index.txt";
 	public static final String CACHE_STOPS_ORDER = "stopsOrder";
@@ -155,11 +153,44 @@ public class Constants {
 	public static final String GTFS_STOPTIMES = "stop_times.txt";
 	public static final String GTFS_CALENDAR = "calendar.txt";
 	public static final String GTFS_CALENDAR_DATE = "calendar_dates.txt";
+	// trips.txt (route_id,service_id,trip_id,trip_headsign,direction_id,shape_id,wheelchair_accessible)
+	public static final String TRIP_ROUTE_ID = "route_id";
+	public static final String TRIP_SERVICE_ID = "service_id";
+	public static final String TRIP_ID = "trip_id";
+	public static final String TRIP_HEADSIGN= "headsign";
+	public static final String TRIP_DIRECTION_ID = "direction_id";
+	public static final String TRIP_SHAPE_ID = "shape_id";
+	public static final String TRIP_WHEELCHAIR_ACCESSIBLE = "wheelchair_accessible";
+	// stops.txt (stop_id,stop_code,stop_name,stop_desc,stop_lat,stop_lon,zone_id,wheelchair_boarding)
 	public static final String STOP_ID = "stop_id";
+	public static final String STOP_CODE = "stop_code";
 	public static final String STOP_NAME = "stop_name";
+	public static final String STOP_DESC = "stop_desc";
 	public static final String STOP_LAT = "stop_lat";
 	public static final String STOP_LON = "stop_lon";
+	public static final String STOP_ZONE = "zone_id";
 	public static final String STOP_WHEELCHAIR_BOARDING = "wheelchair_boarding";
+	// (stoptimes.txt)trip_id,arrival_time,departure_time,stop_id,stop_sequence
+	public static final String STIMES_TRIP_ID = "trip_id";
+	public static final String STIMES_ARRIVAL_TIME = "arrival_time";
+	public static final String STIMES_DEPARTURE_TIME = "departure_time";
+	public static final String STIMES_STOP_ID = "stop_id";
+	public static final String STIMES_STOP_SEQ = "stop_sequence";
+	// calendar_dates.txt (service_id,date,exception_type)
+	public static final String CDATES_SERVICE_ID = "service_id";
+	public static final String CDATES_DATE = "date";
+	public static final String CDATES_EXCEPTION_TYPE = "exception_type";
+	// calendar.txt (service_id,monday,tuesday,wednesday,thursday,friday,saturday,sunday,start_date,end_date)
+	public static final String CAL_SERVICE_ID = "service_id";
+	public static final String CAL_MON = "monday";
+	public static final String CAL_TUE = "tuesday";
+	public static final String CAL_WED = "wednesday";
+	public static final String CAL_THR = "thursday";
+	public static final String CAL_FRI = "friday";
+	public static final String CAL_SAT = "saturday";
+	public static final String CAL_SUN = "sunday";
+	public static final String CAL_START_DATE = "start_date";
+	public static final String CAL_END_DATE = "end_date";
 
 	// ENCODING.
 	public static final String UTF8_BOM = "\uFEFF";

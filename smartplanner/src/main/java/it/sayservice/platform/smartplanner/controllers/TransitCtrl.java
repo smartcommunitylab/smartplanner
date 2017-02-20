@@ -43,6 +43,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -115,9 +116,13 @@ public class TransitCtrl {
 	@RequestMapping(method = RequestMethod.GET, value = "/{router}/rest/gettimetable/{agencyId}/{routeId}/{stopId:.*}")
 	public @ResponseBody void getTimeTable(HttpServletRequest request, HttpServletResponse response,
 			@PathVariable String router, @PathVariable String agencyId, @PathVariable String routeId,
-			@PathVariable String stopId) {
+			@PathVariable String stopId, @ApiParam(required=false) @RequestParam(required=false) Long fromTime) {
 		try {
-			String timetable = manager.getTimeTable(router, agencyId, routeId, stopId);
+			if (fromTime == null) {
+				fromTime = System.currentTimeMillis();
+			}			
+
+			String timetable = manager.getTimeTable(router, agencyId, routeId, stopId, fromTime);
 
 			response.setContentType("application/json; charset=utf-8");
 			response.getWriter().write(timetable);
@@ -130,15 +135,18 @@ public class TransitCtrl {
 	@RequestMapping(method = RequestMethod.GET, value = "/{router}/rest/getlimitedtimetable/{agencyId}/{stopId:.*}/{maxElements}")
 	public @ResponseBody void getLimitedTimeTable(HttpServletRequest request, HttpServletResponse response,
 			@PathVariable String router, @PathVariable String agencyId, @PathVariable String stopId,
-			@ApiParam(value = "max number of required trips for each stop.", required = true) @PathVariable Integer maxElements) {
+			@ApiParam(value = "max number of required trips for each stop.", required = true) @PathVariable Integer maxElements, @ApiParam(required=false) @RequestParam(required=false) Long fromTime) {
 		try {
-			long fromTime = System.currentTimeMillis();
+			if (fromTime == null) {
+				fromTime = System.currentTimeMillis();
+			}
 			String timetable = manager.getLimitedTimeTable(router, agencyId, stopId, fromTime, maxElements);
 
 			response.setContentType("application/json; charset=utf-8");
 			response.getWriter().write(timetable);
 
 		} catch (Exception e) {
+			e.printStackTrace();
 			response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 		}
 	}

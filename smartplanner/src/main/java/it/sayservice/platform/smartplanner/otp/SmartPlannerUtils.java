@@ -46,6 +46,14 @@ public class SmartPlannerUtils {
 		}
 		return calendar.getTimeInMillis();
 	}
+	
+	public static long computeDate(int seconds, Long serviceDay) throws ParseException {
+		Date date = otpDateFormatter.parse(otpDateFormatter.format(serviceDay));
+		calendar.setTime(date);
+		calendar.add(Calendar.SECOND, seconds);
+		long time = calendar.getTimeInMillis();
+		return calendar.getTimeInMillis();
+	}
 
 	public static boolean isNonNegativeDouble(String price) {
 		double value;
