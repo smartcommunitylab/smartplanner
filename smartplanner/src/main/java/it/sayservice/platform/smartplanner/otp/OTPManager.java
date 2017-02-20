@@ -17,6 +17,27 @@
 
 package it.sayservice.platform.smartplanner.otp;
 
+import it.sayservice.platform.smartplanner.cache.annotated.AnnotatedTrip;
+import it.sayservice.platform.smartplanner.cache.annotated.SymbolicRouteDayInfo;
+import it.sayservice.platform.smartplanner.cache.annotated.SymbolicRouteDayInfoHashCalendar;
+import it.sayservice.platform.smartplanner.configurations.ConfigurationManager;
+import it.sayservice.platform.smartplanner.configurations.MongoRouterMapper;
+import it.sayservice.platform.smartplanner.data.message.alerts.AlertDelay;
+import it.sayservice.platform.smartplanner.data.message.alerts.CreatorType;
+import it.sayservice.platform.smartplanner.data.message.otpbeans.ExtendedTransitTimeTable;
+import it.sayservice.platform.smartplanner.data.message.otpbeans.GeolocalizedStopRequest;
+import it.sayservice.platform.smartplanner.data.message.otpbeans.Id;
+import it.sayservice.platform.smartplanner.data.message.otpbeans.Route;
+import it.sayservice.platform.smartplanner.data.message.otpbeans.StopTime;
+import it.sayservice.platform.smartplanner.data.message.otpbeans.TransitStops;
+import it.sayservice.platform.smartplanner.model.Stop;
+import it.sayservice.platform.smartplanner.otp.schedule.StopNames;
+import it.sayservice.platform.smartplanner.otp.schedule.Timetable;
+import it.sayservice.platform.smartplanner.otp.schedule.TripSchedule;
+import it.sayservice.platform.smartplanner.utils.Agency;
+import it.sayservice.platform.smartplanner.utils.Constants;
+import it.sayservice.platform.smartplanner.utils.RecurrentUtil;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -48,26 +69,6 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Multimap;
 import com.mongodb.DBObject;
 import com.mongodb.QueryBuilder;
-
-import it.sayservice.platform.smartplanner.cache.annotated.AnnotatedTrip;
-import it.sayservice.platform.smartplanner.cache.annotated.SymbolicRouteDayInfo;
-import it.sayservice.platform.smartplanner.cache.annotated.SymbolicRouteDayInfoHashCalendar;
-import it.sayservice.platform.smartplanner.configurations.ConfigurationManager;
-import it.sayservice.platform.smartplanner.configurations.MongoRouterMapper;
-import it.sayservice.platform.smartplanner.data.message.alerts.AlertDelay;
-import it.sayservice.platform.smartplanner.data.message.alerts.CreatorType;
-import it.sayservice.platform.smartplanner.data.message.otpbeans.ExtendedTransitTimeTable;
-import it.sayservice.platform.smartplanner.data.message.otpbeans.GeolocalizedStopRequest;
-import it.sayservice.platform.smartplanner.data.message.otpbeans.Route;
-import it.sayservice.platform.smartplanner.data.message.otpbeans.StopTime;
-import it.sayservice.platform.smartplanner.data.message.otpbeans.TransitStops;
-import it.sayservice.platform.smartplanner.model.Stop;
-import it.sayservice.platform.smartplanner.otp.schedule.StopNames;
-import it.sayservice.platform.smartplanner.otp.schedule.Timetable;
-import it.sayservice.platform.smartplanner.otp.schedule.TripSchedule;
-import it.sayservice.platform.smartplanner.utils.Agency;
-import it.sayservice.platform.smartplanner.utils.Constants;
-import it.sayservice.platform.smartplanner.utils.RecurrentUtil;
 
 @Component
 public class OTPManager {
@@ -433,11 +434,11 @@ public class OTPManager {
 		}
 	}
 
-	public String getTimeTable(String router, String agencyId, String routeId, String stopId) throws Exception {
+	public String getTimeTable(String router, String agencyId, String routeId, String stopId, Long fromTime) throws Exception {
 		init(router);
 
 		List<StopTime> result = handler.getTimes(router, agencyId, routeId, stopId,
-				System.currentTimeMillis() - MINUTES_10 * 6, System.currentTimeMillis() + MINUTES_10 * 6);
+				fromTime - MINUTES_10 * 6, fromTime + MINUTES_10 * 6);
 
 		ObjectMapper mapper = new ObjectMapper();
 		return mapper.writeValueAsString(result);
