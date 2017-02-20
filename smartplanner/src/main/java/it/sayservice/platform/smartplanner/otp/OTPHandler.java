@@ -17,6 +17,26 @@
 
 package it.sayservice.platform.smartplanner.otp;
 
+import it.sayservice.platform.smartplanner.cache.annotated.AnnotatedReader;
+import it.sayservice.platform.smartplanner.cache.annotated.AnnotatedTrip;
+import it.sayservice.platform.smartplanner.configurations.RouterConfig;
+import it.sayservice.platform.smartplanner.data.message.otpbeans.Id;
+import it.sayservice.platform.smartplanner.data.message.otpbeans.Route;
+import it.sayservice.platform.smartplanner.data.message.otpbeans.StopTime;
+import it.sayservice.platform.smartplanner.data.message.otpbeans.TransitStops;
+import it.sayservice.platform.smartplanner.otp.schedule.Timetable;
+import it.sayservice.platform.smartplanner.otp.schedule.TransitTimes;
+import it.sayservice.platform.smartplanner.otp.schedule.TripSchedule;
+import it.sayservice.platform.smartplanner.otp.schedule.TripTimeEntry;
+import it.sayservice.platform.smartplanner.otp.schedule.TripTimes;
+import it.sayservice.platform.smartplanner.otp.schedule.Trips;
+import it.sayservice.platform.smartplanner.otp.schedule.WeekdayException;
+import it.sayservice.platform.smartplanner.otp.schedule.WeekdayFilter;
+import it.sayservice.platform.smartplanner.utils.Agency;
+import it.sayservice.platform.smartplanner.utils.Constants;
+import it.sayservice.platform.smartplanner.utils.HTTPConnector;
+import it.sayservice.platform.smartplanner.utils.UnZip;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -49,26 +69,6 @@ import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Multimap;
 import com.google.gdata.util.io.base.UnicodeReader;
-
-import it.sayservice.platform.smartplanner.cache.annotated.AnnotatedReader;
-import it.sayservice.platform.smartplanner.cache.annotated.AnnotatedTrip;
-import it.sayservice.platform.smartplanner.configurations.RouterConfig;
-import it.sayservice.platform.smartplanner.data.message.otpbeans.Id;
-import it.sayservice.platform.smartplanner.data.message.otpbeans.Route;
-import it.sayservice.platform.smartplanner.data.message.otpbeans.StopTime;
-import it.sayservice.platform.smartplanner.data.message.otpbeans.TransitStops;
-import it.sayservice.platform.smartplanner.otp.schedule.Timetable;
-import it.sayservice.platform.smartplanner.otp.schedule.TransitTimes;
-import it.sayservice.platform.smartplanner.otp.schedule.TripSchedule;
-import it.sayservice.platform.smartplanner.otp.schedule.TripTimeEntry;
-import it.sayservice.platform.smartplanner.otp.schedule.TripTimes;
-import it.sayservice.platform.smartplanner.otp.schedule.Trips;
-import it.sayservice.platform.smartplanner.otp.schedule.WeekdayException;
-import it.sayservice.platform.smartplanner.otp.schedule.WeekdayFilter;
-import it.sayservice.platform.smartplanner.utils.Agency;
-import it.sayservice.platform.smartplanner.utils.Constants;
-import it.sayservice.platform.smartplanner.utils.HTTPConnector;
-import it.sayservice.platform.smartplanner.utils.UnZip;
 
 @Component
 @EnableConfigurationProperties(RouterConfig.class)
@@ -268,8 +268,8 @@ public class OTPHandler {
 				ArrayNode times = mapper.convertValue(pattern.get("times"), ArrayNode.class);
 				for (JsonNode timeNode : times) {
 					String[] ids = timeNode.get("tripId").asText().split(":");
-					long time = SmartPlannerUtils.addSecondsToTimeStamp(from,
-							timeNode.get("scheduledDeparture").asInt());
+//					long time = SmartPlannerUtils.addSecondsToTimeStamp(from, timeNode.get("scheduledDeparture").asInt());
+					long time = SmartPlannerUtils.computeDate(timeNode.get("scheduledDeparture").asInt(), timeNode.get("serviceDay").asLong() * 1000);
 					Id id = new Id();
 					id.setAgency(agencyId);
 					id.setId(ids[1]);
@@ -321,8 +321,9 @@ public class OTPHandler {
 				ArrayNode times = mapper.convertValue(pattern.get("times"), ArrayNode.class);
 				for (JsonNode timeNode : times) {
 					String[] ids = timeNode.get("tripId").asText().split(":");
-					long time = SmartPlannerUtils.addSecondsToTimeStamp(from,
-							timeNode.get("scheduledDeparture").asInt());
+//					long time = SmartPlannerUtils.addSecondsToTimeStamp(from, timeNode.get("scheduledDeparture").asInt());
+					long time = SmartPlannerUtils.computeDate(timeNode.get("scheduledDeparture").asInt(), timeNode.get("serviceDay").asLong() * 1000);
+
 					Id id = new Id();
 					id.setAgency(agencyId);
 					id.setId(ids[1]);
