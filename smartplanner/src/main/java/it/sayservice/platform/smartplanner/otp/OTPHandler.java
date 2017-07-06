@@ -801,6 +801,9 @@ public class OTPHandler {
 					+ System.getProperty("file.separator") + Constants.SCHEDULES_FOLDER_PATH
 					+ System.getProperty("file.separator") + agencyId + System.getProperty("file.separator")
 					+ Constants.GTFS_CALENDAR);
+			if (lines.size() <= 1) { // in case of empty calendar.txt file with just header throw exception
+				throw new ArrayIndexOutOfBoundsException();
+			}	
 		} catch (Exception e) {
 
 			// if calendar.txt is missing, construct entries using calendar_dates.txt

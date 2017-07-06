@@ -46,6 +46,19 @@ publicTransport:
   folgariaBus100:
     agencyId: 8
     type: bus
+  folgariaLV:
+    agencyId: 9
+    type: bus
+  folgariaLR:
+    agencyId: 13
+    type: bus
+  folgariaLB:
+    agencyId: 11
+    type: bus
+  lavaroneTrenino:
+    agencyId: 14
+    type: train
+    
     
 carParking:
   COMUNE_DI_TRENTO:
@@ -60,6 +73,9 @@ carParking:
       validity: 3
       notification-threshold: 5
     filePath: /cache/car/cp-comune_di_rovereto.json
+  COMUNE_DI_ALPECIMBRA:
+    agencyId: comune
+    filePath: /cache/car/cp-comune_di_alpecimbra.json
 
 carSharing:
   CAR_SHARING_TRENTO:
