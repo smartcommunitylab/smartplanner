@@ -47,7 +47,7 @@ public class AreaInfoLoader {
 				+ Constants.AREA_CACHE_DIR + System.getProperty("file.separator");
 		File dir = new File(path);
 		if (dir == null || !dir.isDirectory())
-			throw new FileNotFoundException("areainfo");
+			return;
 
 		repository.deleteAll();
 

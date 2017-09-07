@@ -39,6 +39,7 @@ import it.sayservice.platform.smartplanner.utils.UnZip;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -193,7 +194,9 @@ public class OTPHandler {
 				id.setAgency(agencyId);
 				id.setId(routeId);
 				route.setId(id);
+				if (tmpMap.containsKey("longName"))
 				route.setRouteLongName(tmpMap.get("longName").toString());
+				if (tmpMap.containsKey("shortName"))
 				route.setRouteShortName(tmpMap.get("shortName").toString());
 
 				result.add(route);
@@ -377,12 +380,12 @@ public class OTPHandler {
 					try {
 						String id = words[idIndex];
 						String name = words[nameIndex].trim();
-						double latitude = Double.parseDouble(words[latIndex]);
-						double longitude = Double.parseDouble(words[lonIndex]);
+						double latitude = Double.parseDouble(words[latIndex].trim());
+						double longitude = Double.parseDouble(words[lonIndex].trim());
 
 						int wheelChairBoarding = 0;
-						if (wheelChairIndex > -1) {
-							wheelChairBoarding = Integer.parseInt(words[wheelChairIndex]);
+						if (wheelChairIndex > -1 && !words[wheelChairIndex].trim().isEmpty()) {
+							wheelChairBoarding = Integer.parseInt(words[wheelChairIndex].trim());
 						}
 
 						Map<String, Object> stop = new TreeMap<String, Object>();
@@ -410,7 +413,7 @@ public class OTPHandler {
 		int index = -1;
 
 		for (int i = 0; i < heading.length; i++) {
-			if (fieldName.equalsIgnoreCase(heading[i])) {
+			if (fieldName.equalsIgnoreCase(heading[i].trim())) {
 				index = i;
 				break;
 			}
@@ -753,39 +756,39 @@ public class OTPHandler {
 				+ Constants.GTFS_CALENDAR_DATE);
 
 		// service_id,date,exception_type
-		int serviceIdIndex = getFieldIndex(Constants.CDATES_SERVICE_ID, lines.get(0));
-		int dateIndex = getFieldIndex(Constants.CDATES_DATE, lines.get(0));
-		int exceptionTypeIndex = getFieldIndex(Constants.CDATES_EXCEPTION_TYPE, lines.get(0));
-		
-		for (int i = 1; i < lines.size(); i++) {
-			
-			String[] words = lines.get(i);
-						
-			try {
-				String name = agencyId + "_" + words[serviceIdIndex]; // new
-				String date = words[dateIndex];
-				String type = words[exceptionTypeIndex];
-				WeekdayException wde;
-				if (entries.containsKey(name)) {
-					wde = entries.get(name);
-				} else {
-					wde = new WeekdayException();
-				}
-				if ("1".equals(type)) {
-					wde.getAdded().add(date);
-				} else if ("2".equals(type)) {
-					wde.getRemoved().add(date);
-				}
+		if (!lines.isEmpty()) {
+			int serviceIdIndex = getFieldIndex(Constants.CDATES_SERVICE_ID, lines.get(0));
+			int dateIndex = getFieldIndex(Constants.CDATES_DATE, lines.get(0));
+			int exceptionTypeIndex = getFieldIndex(Constants.CDATES_EXCEPTION_TYPE, lines.get(0));
 
-				entries.put(name, wde);
-			} catch (Exception e) {
-				System.out.println("Error parsing weekdays exception");
-				e.printStackTrace();
+			for (int i = 1; i < lines.size(); i++) {
+
+				String[] words = lines.get(i);
+
+				try {
+					String name = agencyId + "_" + words[serviceIdIndex].trim(); // new
+					String date = words[dateIndex].trim();
+					String type = words[exceptionTypeIndex].trim();
+					WeekdayException wde;
+					if (entries.containsKey(name)) {
+						wde = entries.get(name);
+					} else {
+						wde = new WeekdayException();
+					}
+					if ("1".equals(type)) {
+						wde.getAdded().add(date);
+					} else if ("2".equals(type)) {
+						wde.getRemoved().add(date);
+					}
+
+					entries.put(name, wde);
+				} catch (Exception e) {
+					System.out.println("Error parsing weekdays exception");
+					e.printStackTrace();
+				}
 			}
 		}
-
-		// }
-
+		
 		return entries;
 
 	}
@@ -801,6 +804,9 @@ public class OTPHandler {
 					+ System.getProperty("file.separator") + Constants.SCHEDULES_FOLDER_PATH
 					+ System.getProperty("file.separator") + agencyId + System.getProperty("file.separator")
 					+ Constants.GTFS_CALENDAR);
+			if (lines.size() <= 1) { // in case of empty calendar.txt file with just header throw exception
+				throw new ArrayIndexOutOfBoundsException();
+			}	
 		} catch (Exception e) {
 
 			// if calendar.txt is missing, construct entries using calendar_dates.txt
@@ -823,8 +829,8 @@ public class OTPHandler {
 				String[] words = linesEx.get(i);
 
 				try {
-					String name = agencyId + "_" + words[serviceIdIndex]; // new
-					String date = words[dateIndex];
+					String name = agencyId + "_" + words[serviceIdIndex].trim(); // new
+					String date = words[dateIndex].trim();
 
 					if (!serviceStartDate.containsKey(name)) {
 						serviceStartDate.put(name, date);
@@ -882,8 +888,8 @@ public class OTPHandler {
 					for (int d = 1; d < 8; d++) {
 						b[d - 1] = words[d].equals("1") ? true : false;
 					}
-					String startDate = words[startDateIndex]; //8
-					String endDate = words[endDateIndex]; //9
+					String startDate = words[startDateIndex].trim(); //8
+					String endDate = words[endDateIndex].trim(); //9
 					WeekdayFilter wdf = new WeekdayFilter();
 					wdf.setName(name);
 					wdf.setDays(b);
@@ -919,9 +925,9 @@ public class OTPHandler {
 
 			String[] words = lines.get(i);
 			try {
-				String routeId = words[routeIdIndex];
-				String recurrence = agencyId + "_" + words[tripServiceIdIndex]; // new
-				String tripId = words[tripIdIndex];
+				String routeId = words[routeIdIndex].trim();
+				String recurrence = agencyId + "_" + words[tripServiceIdIndex].trim(); // new
+				String tripId = words[tripIdIndex].trim();
 				Trips trips = new Trips();
 				trips.setRouteId(routeId);
 				trips.getTripIds().add(tripId);
@@ -962,16 +968,16 @@ public class OTPHandler {
 			
 			try {
 				
-				String tripId = words[tripIdIndex]; // 0
-				String time = words[arrivalTimeIndex]; // 1
+				String tripId = words[tripIdIndex].trim(); // 0
+				String time = words[arrivalTimeIndex].trim(); // 1
 				
 				if (time.length() == 8) {
 					time = time.substring(0, 5);
 				}
 				
-				String stopId = words[stopIdIndex]; // 3
+				String stopId = words[stopIdIndex].trim(); // 3
 				
-				int sequence = Integer.parseInt(words[stopSequenceIndex]); //4
+				int sequence = Integer.parseInt(words[stopSequenceIndex].trim()); //4
 				
 				TripTimeEntry entry = new TripTimeEntry();
 
@@ -1033,19 +1039,20 @@ public class OTPHandler {
 		return map;
 	}
 
-	private List<String[]> readCSV(String fileName) throws IOException {
-		FileInputStream fis = new FileInputStream(new File(fileName));
-		UnicodeReader ur = new UnicodeReader(fis, "UTF-8");
-
+	private List<String[]> readCSV(String fileName) {
 		List<String[]> lines = new ArrayList<String[]>();
-		for (CSVRecord record : CSVFormat.DEFAULT.parse(ur)) {
-			String[] line = Iterables.toArray(record, String.class);
-			lines.add(line);
+		try {
+			FileInputStream fis = new FileInputStream(new File(fileName));
+			UnicodeReader ur = new UnicodeReader(fis, "UTF-8");
+			for (CSVRecord record : CSVFormat.DEFAULT.parse(ur)) {
+				String[] line = Iterables.toArray(record, String.class);
+				lines.add(line);
+			}
+			lines.get(0)[0] = lines.get(0)[0].replaceAll(Constants.UTF8_BOM, "");
+			return lines;
+		} catch (IOException e) {
+			return lines;
 		}
-		lines.get(0)[0] = lines.get(0)[0].replaceAll(Constants.UTF8_BOM, "");
-
-		return lines;
-
 	}
 
 	public RouterConfig getRouterConfig() {
