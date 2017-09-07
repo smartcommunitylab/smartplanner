@@ -28,7 +28,7 @@ public enum TType {
 	CAR(0,11),BICYCLE(16,0),TRANSIT(0,2),SHAREDBIKE(16,0),SHAREDBIKE_WITHOUT_STATION(16,0),GONDOLA(0,2),
 	CARWITHPARKING(0,11),SHAREDCAR(0,4),SHAREDCAR_WITHOUT_STATION(0,4),BUS(0,2),TRAIN(0,2),WALK(12,0),SHUTTLE(0,2),
 	PARK_AND_RIDE(0,4),TRAM(0,2),LIGHT_RAIL(0,2),STREETCAR(0,11),SUBWAY(0,2),METRO(0,2),RAIL(0,2),FERRY(0,2),CABLE_CAR(0,2),
-	SUSPENDED_CABLE_CAR(0,2), FUNICULAR(0,2);
+	SUSPENDED_CABLE_CAR(0,2), FUNICULAR(0,2), PARKWALK(12,0);
 	
 	private int health;
 	private int green;
@@ -71,7 +71,9 @@ public enum TType {
 		else if (mode.equalsIgnoreCase("SHUTTLE"))
 			return TType.SHUTTLE;
 		else if (mode.equalsIgnoreCase("PARK_AND_RIDE"))
-			return TType.PARK_AND_RIDE;		
+			return TType.PARK_AND_RIDE;	
+		else if (mode.equalsIgnoreCase("PARKWALK"))
+			return TType.PARKWALK;				
 		return TType.TRANSIT;
 		}
 
