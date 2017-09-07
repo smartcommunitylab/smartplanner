@@ -132,7 +132,7 @@ public class TaxiCtrl {
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/{router}/rest/taxi/contacts")
-	public @ResponseBody List<Contact> getTaxiAgencyContacts(@PathVariable String router) throws SmartPlannerException {
+	public @ResponseBody List<Contact> getAllTaxiAgencyContacts(@PathVariable String router) throws SmartPlannerException {
 
 		List<Contact> result = new ArrayList<Contact>();
 
@@ -144,6 +144,28 @@ public class TaxiCtrl {
 		}
 
 		return result;
+
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/{router}/rest/taxi/contacts/{agencyId}")
+	public @ResponseBody List<Contact> getTaxiAgencyContacts(@PathVariable String router, @PathVariable String agencyId) throws SmartPlannerException {
+
+		List<Contact> contacts = new ArrayList<Contact>();
+
+		try {
+			List<Contact> temp = repositoryUtils.getTaxiAgencyContacts(router);
+
+			for (Contact contact : temp) {
+				if (contact.getAgencyId().equalsIgnoreCase(agencyId)) {
+					contacts.add(contact);
+				}
+			}
+
+		} catch (Exception e) {
+			throw new SmartPlannerException(e.getMessage());
+		}
+
+		return contacts;
 
 	}
 

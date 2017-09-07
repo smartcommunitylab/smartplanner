@@ -29,6 +29,8 @@ public class Contact {
 	private String agencyId;
 	private List<String> phone;
 	private List<String> sms;
+	private String email;
+	private String web;
 
 	public String getId() {
 		return id;
@@ -68,6 +70,22 @@ public class Contact {
 
 	public void setSms(List<String> sms) {
 		this.sms = sms;
+	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+
+	public String getWeb() {
+		return web;
+	}
+
+	public void setWeb(String web) {
+		this.web = web;
 	}
 
 }

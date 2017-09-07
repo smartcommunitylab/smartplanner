@@ -82,7 +82,7 @@ public class RepositoryUtils {
 		try {
 			new AreaInfoLoader(areaPointRepository).loadData(routerConfig);
 		} catch (Exception e) {
-			throw new SmartPlannerException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "carStation repository is null.");
+			throw new SmartPlannerException(HttpStatus.INTERNAL_SERVER_ERROR.value(), "areainfo repository is null.");
 		}
 
 	}

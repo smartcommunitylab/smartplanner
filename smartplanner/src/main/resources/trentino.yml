@@ -10,48 +10,55 @@ publicTransport:
   trentoUrban:
      agencyId: 12
      type: bus
-     tripTxt: trips_tt.txt
-     stopTxt: stops_tt.txt
      specificProperties:
        dateFrom: 02/02/15
        dateTo: 09/06/15
   roveretoUrban:
     agencyId: 16
     type: bus
-    tripTxt: trips_rv.txt
-    stopTxt: stops_rv.txt
     specificProperties:
       dateFrom: 02/02/15
       dateTo: 09/06/15
   extraUrban:
     agencyId: 17
     type: bus
-    tripTxt: trips_ext.txt
-    stopTxt: stops_ext.txt
     specificProperties:
       dateFrom: 02/02/15
       dateTo: 09/06/15
   bolzanoVerona:
     agencyId: 5
     type: train
-    tripTxt: trips_bv.txt
-    stopTxt: stops_bv.txt
     specificProperties:
       routeIds: BV_R1_R,BV_R1_G
   trentoMale:
     agencyId: 10
     type: train
-    tripTxt: trips_tm.txt
-    stopTxt: stops_tm.txt
     specificProperties:
       routeIds: 555,556
   trentoBassano:
     agencyId: 6
     type: train
-    tripTxt: trips_tb.txt
-    stopTxt: stops_tb.txt
     specificProperties:
-      routeIds: TB_R2_R,TB_R2_G 
+      routeIds: TB_R2_R,TB_R2_G
+  folgariaTrenino:
+    agencyId: 7
+    type: train
+  folgariaBus100:
+    agencyId: 8
+    type: bus
+  folgariaLV:
+    agencyId: 9
+    type: bus
+  folgariaLR:
+    agencyId: 13
+    type: bus
+  folgariaLB:
+    agencyId: 11
+    type: bus
+  lavaroneTrenino:
+    agencyId: 14
+    type: train
+    
     
 carParking:
   COMUNE_DI_TRENTO:
@@ -66,6 +73,9 @@ carParking:
       validity: 3
       notification-threshold: 5
     filePath: /cache/car/cp-comune_di_rovereto.json
+  COMUNE_DI_ALPECIMBRA:
+    agencyId: comune
+    filePath: /cache/car/cp-comune_di_alpecimbra.json
 
 carSharing:
   CAR_SHARING_TRENTO:
@@ -128,3 +138,8 @@ taxi:
     region: trento
     filePath: /cache/taxi/taxi-trento.json
     contactfilePath: /cache/taxi/contacts.json
+ comune-alpecimbra:
+    agencyId: taxi_alpecimbra
+    region: folgaria
+    filePath: /cache/taxi/taxi-alpecimbra.json
+    contactfilePath: /cache/taxi/contacts-alpecimbra.json
