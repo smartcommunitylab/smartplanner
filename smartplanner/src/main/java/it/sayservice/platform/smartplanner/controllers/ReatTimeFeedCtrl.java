@@ -199,7 +199,7 @@ public class ReatTimeFeedCtrl {
 			result = repositoryUtils.updateAlertDelay(router, ad);
 		}
 
-		return ("Delay Alert " + result);
+		return ("Delay Alert " + result + "for router " + router);
 
 	}
 
@@ -231,8 +231,8 @@ public class ReatTimeFeedCtrl {
 		} else {
 			result = repositoryUtils.updateAlertDelay(router, alertDelay);
 		}
-
-		return ("Delay Alert " + result);
+		
+		return ("Delay Alert " + result + "for router " + router);
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "/{router}/rest/updateAEGTFS")

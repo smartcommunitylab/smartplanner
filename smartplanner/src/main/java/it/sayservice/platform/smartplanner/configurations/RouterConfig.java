@@ -188,12 +188,11 @@ public class RouterConfig {
 		for (String agencyKey : this.getPublicTransport().keySet()) {
 			Agency agency = this.getPublicTransport().get(agencyKey);
 			if (agency.getType().equals(transportType.TRAIN.toString())) {
-				if (agency.getSpecificProperties().containsKey("routeIds")) {
+				if (agency.getSpecificProperties()!= null && agency.getSpecificProperties().containsKey("routeIds")) {
 					String[] ids = agency.getSpecificProperties().get("routeIds").split(",");
 					for (String id : ids) {
 						routeIds.add(id);
 					}
-
 				}
 			}
 		}

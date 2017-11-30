@@ -21,6 +21,7 @@ import it.sayservice.platform.smartplanner.areainfo.AreaInfoLoader;
 import it.sayservice.platform.smartplanner.configurations.ConfigurationManager;
 import it.sayservice.platform.smartplanner.configurations.MongoRouterMapper;
 import it.sayservice.platform.smartplanner.configurations.RouterConfig;
+import it.sayservice.platform.smartplanner.controllers.ReatTimeFeedCtrl;
 import it.sayservice.platform.smartplanner.data.message.Transport;
 import it.sayservice.platform.smartplanner.data.message.alerts.AlertAccident;
 import it.sayservice.platform.smartplanner.data.message.alerts.AlertDelay;
@@ -51,6 +52,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.geo.Distance;
 import org.springframework.data.geo.Metrics;
@@ -76,6 +79,7 @@ public class RepositoryUtils {
 	private ConfigurationManager configurationManager;
 	/** object mapper. **/
 	private ObjectMapper mapper = new ObjectMapper();
+	private static final transient Logger logger = LoggerFactory.getLogger(RepositoryUtils.class);
 
 	private void buildAreaPointRepo(RouterConfig routerConfig, AreaPointRepository areaPointRepository)
 			throws SmartPlannerException {
@@ -876,6 +880,8 @@ public class RepositoryUtils {
 				if (ad.getDelay() != -1) {
 					alertD.setDelay(ad.getDelay());
 				}
+				logger.info("Delay Alert " + result + "for router " + router);
+				logger.info("AlertDelay [id:  " + alertD.getId() + ", routeId: " + alertD.getTransport().getRouteId());
 				template.save(alertD, Constants.ALERT_DELAY_REPO);
 				result = "Updated";
 			} else { // create.
@@ -901,9 +907,12 @@ public class RepositoryUtils {
 				}
 				// id.
 				temp.setId(id);
+				logger.info("Delay Alert " + result + "for router " + router);
+				logger.info("AlertDelay [id:  " + temp.getId() + ", routeId: " + temp.getTransport().getRouteId());
 				template.save(temp, Constants.ALERT_DELAY_REPO);
 			}
 		} catch (Exception e) {
+			logger.error("", e);
 			System.err.println(e.getMessage());
 		}
 
@@ -965,6 +974,9 @@ public class RepositoryUtils {
 					if (ad.getDelay() != -1) {
 						alertD.setDelay(ad.getDelay());
 					}
+					logger.info("Delay Alert " + result + "for router " + router);
+					logger.info("AlertDelay [id:  " + alertD.getId() + ", routeId: " + alertD.getTransport().getRouteId());
+					
 					template.save(alertD, Constants.ALERT_DELAY_REPO);
 					result = "Updated Train";
 				}
@@ -993,10 +1005,13 @@ public class RepositoryUtils {
 					}
 					String aId = tid + "_" + ad.getCreatorType() + "_" + from + "_" + to;
 					temp.setId(aId);
+					logger.info("Delay Alert " + result + "for router " + router);
+					logger.info("AlertDelay [id:  " + temp.getId() + ", routeId: " + temp.getTransport().getRouteId());
 					template.save(temp, Constants.ALERT_DELAY_REPO);
 				}
 			}
 		} catch (Exception e) {
+			logger.error("", e);
 			System.err.println(e.getMessage());
 		}
 
