@@ -992,7 +992,7 @@ public class OTPHandler {
 				entry.setTime(time);
 				entry.setTripId(tripId);
 
-				if (lastStopId == null || !lastStopId.equals(stopId) || !lastTime.equals(time)) {
+				if (lastStopId == null || !lastStopId.equals(stopId) || !lastTime.equals(time) || !lastTripId.equals(tripId)) {
 					entries.add(entry);
 				}
 				lastStopId = stopId;
